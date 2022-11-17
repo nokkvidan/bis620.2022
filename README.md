@@ -9,7 +9,7 @@
 [![Test
 coverage](https://github.com/nokkvidan/bis620.2022/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/nokkvidan/bis620.2022/actions/workflows/test-coverage.yaml)
 [![Lint](https://github.com/nokkvidan/bis620.2022/actions/workflows/lint.yaml/badge.svg)](https://github.com/nokkvidan/bis620.2022/actions/workflows/lint.yaml)
-[![codecov](https://codecov.io/gh/nokkvidan/bis620.2022/branch/main/graph/badge.svg?token=U4USARWKRM)](https://codecov.io/gh/nokkvidan/bis620.2022)
+[![Codecov](https://codecov.io/gh/nokkvidan/bis620.2022/branch/main/graph/badge.svg?token=U4USARWKRM)](https://codecov.io/gh/nokkvidan/bis620.2022)
 <!-- badges: end -->
 
 The goal of `bis620.2022` is to create an accelerometry graphic for a
@@ -24,9 +24,9 @@ available for use in examples as seen here below in the example section.
 
 ### Badge overview
 
-[test coverage page](https://google.com)
+[Coverage page](https://google.com)
 
-[lint
+[Lint
 results](https://github.com/nokkvidan/bis620.2022/actions/workflows/lint.yaml)
 
 ## Installation
