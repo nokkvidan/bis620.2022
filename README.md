@@ -8,7 +8,11 @@
 [![R-CMD-check](https://github.com/nokkvidan/bis620.2022/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/nokkvidan/bis620.2022/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of bis620.2022 is to
+The goal of `bis620.2022` is to create an accelerometry graphic for a
+dataset with time and three-dimensional coordinates. Additionally, it
+has a feature for creating spectral signature plots. The dataset
+`ukb_accel` from UKBiobank is part of the package and is available for
+use in examples as seen here below in the example section.
 
 ## Installation
 
