@@ -8,6 +8,7 @@
 [![R-CMD-check](https://github.com/nokkvidan/bis620.2022/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/nokkvidan/bis620.2022/actions/workflows/R-CMD-check.yaml)
 [![Test
 coverage](https://github.com/nokkvidan/bis620.2022/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/nokkvidan/bis620.2022/actions/workflows/test-coverage.yaml)
+[![Lint](https://github.com/nokkvidan/bis620.2022/actions/workflows/lint.yaml/badge.svg)](https://github.com/nokkvidan/bis620.2022/actions/workflows/lint.yaml)
 <!-- badges: end -->
 
 The goal of `bis620.2022` is to create an accelerometry graphic for a
