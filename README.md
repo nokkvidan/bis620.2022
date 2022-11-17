@@ -9,6 +9,7 @@
 [![Test
 coverage](https://github.com/nokkvidan/bis620.2022/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/nokkvidan/bis620.2022/actions/workflows/test-coverage.yaml)
 [![Lint](https://github.com/nokkvidan/bis620.2022/actions/workflows/lint.yaml/badge.svg)](https://github.com/nokkvidan/bis620.2022/actions/workflows/lint.yaml)
+[![codecov](https://codecov.io/gh/nokkvidan/bis620.2022/branch/main/graph/badge.svg?token=U4USARWKRM)](https://codecov.io/gh/nokkvidan/bis620.2022)
 <!-- badges: end -->
 
 The goal of `bis620.2022` is to create an accelerometry graphic for a
