@@ -24,7 +24,7 @@ available for use in examples as seen here below in the example section.
 
 ### Badge overview
 
-[Coverage page](https://google.com)
+[Coverage page](https://app.codecov.io/gh/nokkvidan/bis620.2022)
 
 [Lint
 results](https://github.com/nokkvidan/bis620.2022/actions/workflows/lint.yaml)

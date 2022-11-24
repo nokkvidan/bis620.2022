@@ -28,7 +28,7 @@ The dataset `ukb_accel` from UKBiobank is part of the package and is available f
 
 ### Badge overview
 
-[Coverage page](https://google.com)
+[Coverage page](https://app.codecov.io/gh/nokkvidan/bis620.2022)
 
 [Lint results](https://github.com/nokkvidan/bis620.2022/actions/workflows/lint.yaml)
 
