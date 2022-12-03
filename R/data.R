@@ -11,3 +11,7 @@
 #' @docType data
 #' @keywords data
 NULL
+
+library(usethis)
+use_vignette("bis620")
+browseVignettes()
