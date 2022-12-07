@@ -3,7 +3,6 @@
 #' @param test testing data
 #' @param y response variable
 #' @param optimize how to optimize the glm
-#' @param evaluate option to evaluate the model
 #' @importFrom MASS stepAIC
 #' @importFrom predtools calibration_plot
 #' @importFrom Metrics rmse mse
@@ -15,7 +14,7 @@
 #' glm_model(train, test, y, "stepAIC", evaluate = TRUE)
 #' }
 #' @export
-glm_model <- function(train, y, test = NA, optimize = NA) {
+glm_model <- function(train, y, test = NULL, optimize = NA) {
   form <- as.formula(paste0(y, "~", "."))
   fit <- glm(form, data = train)
   sum <- summary(fit)
@@ -40,7 +39,7 @@ glm_model <- function(train, y, test = NA, optimize = NA) {
                               paste(sigvars, collapse = "+")))
     final_fit <- glm(form2, data = train)
   }
-  if (!is.na(test)) {
+  if (!is.null(test)) {
     # Set up training results
     train_pred <- predict(final_fit, type = "response")
     train_pred_b <- ifelse(train_pred > 0.5, 1, 0)

@@ -4,18 +4,16 @@
 \alias{glm_model}
 \title{glm_model}
 \usage{
-glm_model(train, test, y, optimize = NA, evaluate = FALSE)
+glm_model(train, y, test = NULL, optimize = NA)
 }
 \arguments{
 \item{train}{training data}
 
-\item{test}{testing data}
-
 \item{y}{response variable}
 
-\item{optimize}{how to optimize the glm}
+\item{test}{testing data}
 
-\item{evaluate}{option to evaluate the model}
+\item{optimize}{how to optimize the glm}
 }
 \description{
 glm_model
