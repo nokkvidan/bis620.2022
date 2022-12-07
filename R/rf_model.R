@@ -3,7 +3,6 @@
 #' @param test test data
 #' @param y response variable
 #' @param optimize how to optimize the model
-#' @param evaluate option to evaluate the model
 #' @importFrom randomForest tuneRF randomForest
 #' @importFrom predtools calibration_plot
 #' @importFrom Metrics rmse mse
@@ -11,11 +10,11 @@
 #' @importFrom pROC roc
 #' @importFrom stats as.formula
 #' @examples \dontrun{
-#' rf_model(train, test, y, optimize = TRUE, evaluate = TRUE)
+#' rf_model("Diabetes_binary", train, test, "stepAIC")
 #' }
 #' @export
 # Evaluate random forest models
-rf_model <- function(train, y, test = NA, optimize = FALSE) {
+rf_model <- function(y, train, test = NULL, optimize = FALSE) {
   train[, y] <- as.factor(as.character(train[, y]))
   form <- as.formula(paste0(y, "~ ."))
   if (optimize ==  TRUE) {
@@ -33,7 +32,7 @@ rf_model <- function(train, y, test = NA, optimize = FALSE) {
                                      ntree = 100, norm.votes = FALSE,
                                      do.trace = 10, importance = TRUE)
   }
-  if (!is.na(test)) {
+  if (!is.null(test)) {
     pred_train <- predict(rf, type = "prob")
     pred_test <- predict(rf, newdata = test, type = "prob")
     train_pred_b <- as.factor(ifelse(pred_train[, 1] < 0.5, TRUE, FALSE))

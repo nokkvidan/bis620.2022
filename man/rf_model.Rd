@@ -4,24 +4,22 @@
 \alias{rf_model}
 \title{rf_model}
 \usage{
-rf_model(train, test, y, optimize = FALSE, evaluate = FALSE)
+rf_model(y, train, test = NULL, optimize = FALSE)
 }
 \arguments{
+\item{y}{response variable}
+
 \item{train}{training data}
 
 \item{test}{test data}
 
-\item{y}{response variable}
-
 \item{optimize}{how to optimize the model}
-
-\item{evaluate}{option to evaluate the model}
 }
 \description{
 rf_model
 }
 \examples{
 \dontrun{
-rf_model(train, test, y, optimize = TRUE, evaluate = TRUE)
+rf_model("Diabetes_binary", train, test, "stepAIC")
 }
 }

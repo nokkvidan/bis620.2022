@@ -4,23 +4,21 @@
 \alias{boost_model}
 \title{boost_model}
 \usage{
-boost_model(train, test, y, evaluate = FALSE)
+boost_model(y, train, test = NULL)
 }
 \arguments{
+\item{y}{response variable}
+
 \item{train}{training data}
 
 \item{test}{test data}
-
-\item{y}{response variable}
-
-\item{evaluate}{option to evaluate the model}
 }
 \description{
 boost_model
 }
 \examples{
 \dontrun{
-xg.model <- boost_model(train, test, y, evaluate = TRUE)
+xg.model <- boost_model(y, train, test)
 plot(xg.model[[5]], main="Out-Of-sample PR curve")
 xgb.plot.importance(xg.model[[3]][1:20,])
 }
