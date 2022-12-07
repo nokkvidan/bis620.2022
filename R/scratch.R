@@ -252,27 +252,46 @@ boost.model <- function(train, test, y, evaluate = FALSE) {
 
 
 
-
+library(randomForest)
 #' @param train training data
 #' @param test test data
 #' @param y response variable
 #' @param evaluate option to evaluate the model
 #' @example \dontrun{
-#' xg.model <- boost.model(train, test, y, evaluate = TRUE)
-#' plot(xg.model[[5]], main="Out-Of-sample PR curve")
-#' xgb.plot.importance(xg.model[[3]][1:20,])
+#' evaluate_rf(train, test, y, optimize = TRUE, evaluate = TRUE)
 #' }
 # Evaluate random forest models
-
-
-library(randomForest)
-form <- as.formula(paste0(y, "~", ".")) 
-rf <- randomForest(form, data=train, ntree=100, norm.votes=FALSE, 
-                   do.trace=10,importance=TRUE)
-
-evaluate_rf <- function(train, test, y, evaluate = FALSE) {
+evaluate_rf <- function(train, test, y, optimize = FALSE, evaluate = FALSE) {
   
+  train[, y] <- as.factor(as.character(train[, y]))
+  form <- as.formula(paste0(y, "~", ".")) 
   
+  if (optimize ==  TRUE) {
+    # Find the optimal mtry value
+    mtry <- tuneRF(train[, !colnames(train) %in% y],
+                   train[, colnames(train) %in% y], 
+                   ntreeTry=100,
+                   stepFactor=1.5,
+                   improve=0.01, 
+                   trace=TRUE, plot=TRUE)
+    
+    best.m <- mtry[mtry[, 2] == min(mtry[, 2]), 1]
+    
+    rf <- randomForest(form, 
+                       data=train, 
+                       ntree=100, 
+                       norm.votes=FALSE, 
+                       do.trace=10, 
+                       mtry=best.m,
+                       importance=TRUE)
+  } else {
+    rf <- randomForest(form, 
+                       data=train, 
+                       ntree=100, 
+                       norm.votes=FALSE, 
+                       do.trace=10, 
+                       importance=TRUE)
+  }
   
   
   if (evaluate == TRUE) {
@@ -320,7 +339,7 @@ evaluate_rf <- function(train, test, y, evaluate = FALSE) {
     # ROC
     test_roc = roc(ev_test$y ~ ev_test$pred, plot = TRUE, print.auc = TRUE)
     
-    ret <- list(results, p1, p2, mses, confmat, test_roc)
+    ret <- list(rf, results, p1, p2, mses, confmat, test_roc)
   } else {
     ret <- rf
   }
