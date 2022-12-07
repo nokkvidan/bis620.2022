@@ -36,9 +36,9 @@ vis_2vars <- function(d, y, x) {
 #' @importFrom ggplot2 aes_string ggplot geom_boxplot facet_grid aes theme_bw
 #' @importFrom gridExtra grid.arrange
 #' @examples \dontrun{
-#' vis.num(df)
+#' vis_num(df)
 #' }
-vis.num <- function(d) {
+vis_num <- function(d) {
   d_num <- d[, sapply(d, is.numeric)]
   d_num_scaled <- data.frame(
     apply(d_num, 2, function(x) (x - min(x)) / (max(x) - min(x))))
