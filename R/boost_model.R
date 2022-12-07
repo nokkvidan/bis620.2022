@@ -25,7 +25,7 @@ boost_model <- function(y, train, test = NULL) {
     # convert the train and test data into xgboost matrix type.
     x_test <- data.matrix(test[, !colnames(test) %in% y])
     y_test <- data.matrix(as.numeric(test[, colnames(test) %in% y]))
-    boost_test <- xgb.DMatrix(data = x_test, label = y_test)
+    boost_test <- xgboost::xgb.DMatrix(data = x_test, label = y_test)
     # use model to make predictions on test data
     pred_test <- predict(model, boost_test)
     pred_test_b <- as.factor(ifelse(pred_test > 0.5, 1, 0))
