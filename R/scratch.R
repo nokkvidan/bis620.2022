@@ -8,6 +8,7 @@ library(ggplot2)
 #' @param d diabetes data frame
 #' @param y an arbitrary variable in diabetes data frame
 #' @param x an arbitrary variable in diabetes data frame
+#' @importFrom ggplot2 aes_string ggplot geom_line facet_grid aes
 #' @example \dontrun{
 #' vis.2vars(df, 'Diabetes_binary', 'BMI')
 #' }
@@ -53,7 +54,7 @@ vis.2vars(d, x, y)
 
 
 #' @param d diabetes data frame
-#' @importFrom ggplot2 aes_string ggplot geom_line facet_grid aes
+#' @importFrom ggplot2 aes_string ggplot geom_boxplot facet_grid aes theme_bw
 #' @importFrom gridExtra grid.arrange
 #' @example \dontrun{
 #' vis.num(df)
@@ -113,13 +114,11 @@ library(Metrics)
 #' @param test testing data
 #' @param optimize how to optimize the glm
 #' @param evaluate option to evaluate the model
-#' @importFrom xgboost xgb.DMatrix xgboost xgb.importance
-#' @importFrom caret 
-#' @importFrom car qqPlot
-#' @importFrom pROC
-#' @importFrom PRROC
-#' @importFrom ROCR
 #' @importFrom MASS stepAIC
+#' @importFrom predtools calibration_plot
+#' @importFrom Metrics rmse mse
+#' @importFrom caret confusionMatrix
+#' @importFrom pROC roc
 #' @example \dontrun{
 #' glm.model(df, optimize = 'manual')
 #' glm.model(train, test, y, 'stepAIC', evaluate = TRUE)
@@ -185,14 +184,14 @@ glm.model <- function(train, test, y, optimize = NA, evaluate = FALSE) {
     row.names(mses) <- c('Training','Validation')
     
     # Cross table and confusion matrix
-    cross_table = table(predicted = as.logical(ev_test$pred.b), 
+    cross_table <- table(predicted = as.logical(ev_test$pred.b), 
                         actual = as.logical(ev_test$y))
     confmat <- confusionMatrix(cross_table, positive = 'TRUE')
     
     results <- list(ev_train, ev_test)
     
     # ROC
-    test_roc = roc(ev_test$y ~ ev_test$pred, plot = TRUE, print.auc = TRUE)
+    test_roc <- roc(ev_test$y ~ ev_test$pred, plot = TRUE, print.auc = TRUE)
     
     ret <- list(final.fit, results, p1, p2, mses, confmat, test_roc)
     
@@ -212,11 +211,14 @@ library(caret)
 
 library(pROC)
 library(PRROC)
-library(ROCR)
 #' @param train training data
 #' @param test test data
 #' @param y response variable
 #' @param evaluate option to evaluate the model
+#' @importFrom xgboost xgb.DMatrix xgboost xgb.importance
+#' @importFrom caret confusionMatrix
+#' @importFrom pROC roc
+#' @importFrom PRROC pr.curve roc.curve
 #' @example \dontrun{
 #' xg.model <- boost.model(train, test, y, evaluate = TRUE)
 #' plot(xg.model[[5]], main="Out-Of-sample PR curve")
@@ -273,11 +275,16 @@ library(randomForest)
 #' @param test test data
 #' @param y response variable
 #' @param evaluate option to evaluate the model
+#' @importFrom randomForest tuneRF randomForest
+#' @importFrom predtools calibration_plot
+#' @importFrom Metrics rmse mse
+#' @importFrom caret confusionMatrix
+#' @importFrom pROC roc
 #' @example \dontrun{
-#' evaluate_rf(train, test, y, optimize = TRUE, evaluate = TRUE)
+#' rf.model(train, test, y, optimize = TRUE, evaluate = TRUE)
 #' }
 # Evaluate random forest models
-evaluate_rf <- function(train, test, y, optimize = FALSE, evaluate = FALSE) {
+rf.model <- function(train, test, y, optimize = FALSE, evaluate = FALSE) {
   
   train[, y] <- as.factor(as.character(train[, y]))
   form <- as.formula(paste0(y, "~", ".")) 
