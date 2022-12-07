@@ -1,5 +1,5 @@
 
-df <- read.csv("diabetes_binary_5050split_health_indicators_BRFSS2015.csv")
+df <- read.csv("/Users/nokkvi/Desktop/Yale/F22/F22_BIS620/bis620.2022/data/diabetes_binary_5050split_health_indicators_BRFSS2015.csv")
 
 library(ggplot2)
 
@@ -75,7 +75,7 @@ vis.num <- function(d) {
          y = 'Variables') +
     theme_bw() + 
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
-
+  
   return(gridExtra::grid.arrange(p1, p2, ncol = 2))
 }
 
@@ -101,110 +101,157 @@ vis.dist <- function(d) {
 
 vis.dist(df)
 
-
-#' @param d data
-#' @param optimize
+library(predtools)
+library(Metrics)
+#' @param train training data
+#' @param test testing data
+#' @param optimize how to optimize the glm
+#' @param evaluate option to evaluate the model
 #' @example \dontrun{
 #' glm.model(df, optimize = 'manual')
-#' glm.model(df, optimize = 'stepAIC')
+#' glm.model(train, test, y, 'stepAIC', evaluate = TRUE)
 #' }
-glm.model <- function(d, optimize = NA) {
+glm.model <- function(train, test, y, optimize = NA, evaluate = FALSE) {
   
-  fit <- glm(Diabetes_binary ~., data = d)
+  form <- as.formula(paste0(y, "~", ".")) 
+  fit <- glm(form, data = train)
   sum <- summary(fit)
   
   if (is.na(optimize)) {
-    
     final.fit <- fit
-    
   } else if (optimize == 'manual') {
-    
     sig <- which(sum$coef[, 4] < 0.1)[-1]
     sigvars <- rownames(sum$coefficients)[sig]
-    
     form1 = as.formula(paste('Diabetes_binary', "~", 
                              paste(sigvars, collapse = '+')))
-    
-    fit1 <- glm(form1, data=d)
+    fit1 <- glm(form1, data=train)
     sum1 <- summary(fit1)
-    
     sig1 <- which(sum1$coef[, 4] < 0.05)[-1]
     sigvars1 <- rownames(sum1$coefficients)[sig1]
-    
     form2 = as.formula(paste('Diabetes_binary', "~", 
                              paste(sigvars1, collapse = '+')))
-    
-    final.fit <- glm(form2, data=d)
+    final.fit <- glm(form2, data=train)
     
   } else if (optimize == 'stepAIC') {
     step <- MASS::stepAIC(fit)
-    
     sigvars <- names(step$coefficients[-1])
     form2 = as.formula(paste('Diabetes_binary', "~", 
                              paste(sigvars, collapse = '+')))
-    final.fit <- glm(form2, data = d)
-    
+    final.fit <- glm(form2, data = train)
   }
   
-  return(final.fit)
+  if (evaluate == TRUE) {
+    # Set up training results
+    train_pred <- predict(final.fit, type = 'response')
+    train_pred.b <- ifelse(train_pred > 0.5, 1, 0)
+    ev_train <- as.data.frame(cbind(y = train[, y], 
+                                    pred = train_pred,
+                                    pred.b = train_pred.b))
+    
+    # Set up test results
+    test_pred <- predict(final.fit, test, type = 'response')
+    test_pred.b <- ifelse(test_pred > 0.5, 1, 0)
+    ev_test <- as.data.frame(cbind(y = test[, y], 
+                                   pred = test_pred,
+                                   pred.b = test_pred.b))
+    
+    # Calibration plots
+    p1 <- calibration_plot(data = ev_train, obs = "y", pred = "pred", 
+                           title = "Calibration plot for training data")
+    
+    p2 <- calibration_plot(data = ev_test, obs = "y", pred = "pred", 
+                           title = "Calibration plot for validation data")
+    
+    # MSE and RMSE
+    mse_train <- mse(actual = ev_train$y, predicted = ev_train$pred)
+    rmse_train <- rmse(actual = ev_train$y, predicted = ev_train$pred)
+    mse_test <- mse(actual = ev_test$y, predicted = ev_test$pred)
+    rmse_test <- rmse(actual = ev_test$y, predicted = ev_test$pred)
+    mses <- round(data.frame(MSE = c(mse_train, mse_test), 
+                             RMSE = c(rmse_train, rmse_test)),3)
+    row.names(mses) <- c('Training','Validation')
+    
+    # Cross table and confusion matrix
+    cross_table = table(predicted = as.logical(ev_test$pred.b), 
+                        actual = as.logical(ev_test$y))
+    confmat <- confusionMatrix(cross_table, positive = 'TRUE')
+    
+    results <- list(ev_train, ev_test)
+    
+    # ROC
+    test_roc = roc(ev_test$y ~ ev_test$pred, plot = TRUE, print.auc = TRUE)
+    
+    ret <- list(final.fit, results, p1, p2, mses, confmat, test_roc)
+    
+  } else {
+    ret <- final.fit
+  }
+  
+  return(ret)
 }
-
-glm.model(df, 'stepAIC')
 
 ################################################################################
 
 library(xgboost)
 library(caret)
-# Splitting up the data into train and test data sets
-set.seed(1)
-sample <- sample(c(1, 2), nrow(df), replace=TRUE, prob=c(0.8, 0.2))
-train <- df[sample == 1, ]
-test <- df[sample == 2, ]
-
-y <- 'Diabetes_binary'
-
-x.train <- data.matrix(train[, !colnames(train) %in% y])
-y.train <- data.matrix(as.numeric(train[, colnames(train) %in% y]))
-x.test <- data.matrix(test[, !colnames(test) %in% y])
-y.test <- data.matrix(as.numeric(test[, colnames(test) %in% y]))
-
-# convert the train and test data into xgboost matrix type.
-boost.train <- xgb.DMatrix(data=x.train, label=y.train)
-boost.test <- xgb.DMatrix(data=x.test, label=y.test)
-
-# train a model using our training data
-model <- xgboost(data = boost.train, max.depth = 15, nrounds = 30)
-
-# use model to make predictions on test data
-pred_test <- predict(model, boost.test)
-
-pred_test.b <- as.factor(ifelse(pred_test > 0.5, 1, 0))
-y.test <- factor(y.test)
-pred_test <- as.numeric(pred_test)
-
-conf_mat = confusionMatrix(y.test, pred_test.b)
-
-# Compute feature importance matrix
-importance_matrix = xgb.importance(colnames(boost.train), model = model)
-xgb.plot.importance(importance_matrix[1:20,])
-
-roc_test <- roc(y.test, pred_test, algorithm = 2,
-                plot = TRUE, print.auc = TRUE) 
-
 library(pROC)
 library(PRROC)
 library(ROCR)
-# ROC and PRAUC
-score1 = pred_test[y.test == 1]
-score0 = pred_test[y.test == 0]
-
-roc = roc.curve(score1, score0, curve = T)
-pr = pr.curve(score1, score0, curve = T)
-
-roc$auc
-pr
-
-plot(pr, main="Out-Of-sample PR curve")
+#' @param train training data
+#' @param test test data
+#' @param y response variable
+#' @example \dontrun{
+#' set.seed(1)
+#' sample <- sample(c(1, 2), nrow(df), replace=TRUE, prob=c(0.8, 0.2))
+#' train <- df[sample == 1, ]
+#' test <- df[sample == 2, ]
+#' xg.model <- boost.model(train, test, y)
+#' plot(xg.model[[5]], main="Out-Of-sample PR curve")
+#' xgb.plot.importance(xg.model[[3]][1:20,])
+#' }
+boost.model <- function(train, test, y, evaluate = FALSE) {
+  x.train <- data.matrix(train[, !colnames(train) %in% y])
+  y.train <- data.matrix(as.numeric(train[, colnames(train) %in% y]))
+  x.test <- data.matrix(test[, !colnames(test) %in% y])
+  y.test <- data.matrix(as.numeric(test[, colnames(test) %in% y]))
+  
+  # convert the train and test data into xgboost matrix type.
+  boost.train <- xgb.DMatrix(data=x.train, label=y.train)
+  boost.test <- xgb.DMatrix(data=x.test, label=y.test)
+  
+  # train a model using our training data
+  model <- xgboost(data = boost.train, max.depth = 15, nrounds = 30)
+  
+  if (evaluate == TRUE) {
+    # use model to make predictions on test data
+    pred_test <- predict(model, boost.test)
+    
+    pred_test.b <- as.factor(ifelse(pred_test > 0.5, 1, 0))
+    y.test <- factor(y.test)
+    pred_test <- as.numeric(pred_test)
+    
+    conf_mat = confusionMatrix(y.test, pred_test.b)
+    
+    # Compute feature importance matrix
+    importance_matrix = xgb.importance(colnames(boost.train), model = model)
+    
+    roc_test <- roc(y.test, pred_test, algorithm = 2,
+                    plot = TRUE, print.auc = TRUE) 
+    
+    # ROC and PRAUC
+    score1 = pred_test[y.test == 1]
+    score0 = pred_test[y.test == 0]
+    
+    roc = roc.curve(score1, score0, curve = T)
+    pr = pr.curve(score1, score0, curve = T)
+    
+    ret <- list(model, conf_mat, importance_matrix, roc, pr)
+  } else {
+    ret <- model
+  }
+  
+  return(ret)
+}
 
 
 
