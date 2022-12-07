@@ -200,12 +200,9 @@ library(ROCR)
 #' @param train training data
 #' @param test test data
 #' @param y response variable
+#' @param evaluate option to evaluate the model
 #' @example \dontrun{
-#' set.seed(1)
-#' sample <- sample(c(1, 2), nrow(df), replace=TRUE, prob=c(0.8, 0.2))
-#' train <- df[sample == 1, ]
-#' test <- df[sample == 2, ]
-#' xg.model <- boost.model(train, test, y)
+#' xg.model <- boost.model(train, test, y, evaluate = TRUE)
 #' plot(xg.model[[5]], main="Out-Of-sample PR curve")
 #' xgb.plot.importance(xg.model[[3]][1:20,])
 #' }
@@ -254,5 +251,81 @@ boost.model <- function(train, test, y, evaluate = FALSE) {
 }
 
 
+
+
+#' @param train training data
+#' @param test test data
+#' @param y response variable
+#' @param evaluate option to evaluate the model
+#' @example \dontrun{
+#' xg.model <- boost.model(train, test, y, evaluate = TRUE)
+#' plot(xg.model[[5]], main="Out-Of-sample PR curve")
+#' xgb.plot.importance(xg.model[[3]][1:20,])
+#' }
+# Evaluate random forest models
+
+
+library(randomForest)
+form <- as.formula(paste0(y, "~", ".")) 
+rf <- randomForest(form, data=train, ntree=100, norm.votes=FALSE, 
+                   do.trace=10,importance=TRUE)
+
+evaluate_rf <- function(train, test, y, evaluate = FALSE) {
+  
+  
+  
+  
+  if (evaluate == TRUE) {
+    pred_train <- predict(rf,type = "prob")
+    pred_test <- predict(rf, newdata = test, type = "prob")
+    
+    train_pred.b <- as.factor(ifelse(pred_train[, 1] < 0.5, TRUE, FALSE))
+    test_pred.b <- as.factor(ifelse(pred_test[, 1] < 0.5, TRUE, FALSE))
+    
+    ev_train <- data.frame(y = as.numeric(as.logical(train$UTI_diag)), 
+                           pred = as.numeric(pred_train[, 2]),
+                           pred.b = train_pred.b)
+    
+    
+    ev_test <- data.frame(y = as.numeric(test$UTI_diag), 
+                          pred = as.numeric(pred_test[, 2]),
+                          pred.b = test_pred.b)
+    
+    
+    
+    # Calibration plots
+    p1 <- calibration_plot(data = ev_train, obs = "y", pred = "pred", 
+                           title = "Calibration plot for training data")
+    
+    p2 <- calibration_plot(data = ev_test, obs = "y", pred = "pred", 
+                           title = "Calibration plot for validation data")
+    
+    
+    # MSE and RMSE
+    mse_train <- mse(actual = ev_train$y, predicted = ev_train$pred)
+    rmse_train <- rmse(actual = ev_train$y, predicted = ev_train$pred)
+    mse_test <- mse(actual = ev_test$y, predicted = ev_test$pred)
+    rmse_test <- rmse(actual = ev_test$y, predicted = ev_test$pred)
+    mses <- round(data.frame(MSE = c(mse_train, mse_test), 
+                             RMSE = c(rmse_train, rmse_test)),3)
+    row.names(mses) <- c('Training','Validation')
+    
+    # Cross table and confusion matrix
+    cross_table = table(predicted = as.logical(ev_test$pred.b), 
+                        actual = as.logical(ev_test$y))
+    confmat <- confusionMatrix(cross_table, positive = 'TRUE')
+    
+    results <- list(ev_train, ev_test)
+    
+    # ROC
+    test_roc = roc(ev_test$y ~ ev_test$pred, plot = TRUE, print.auc = TRUE)
+    
+    ret <- list(results, p1, p2, mses, confmat, test_roc)
+  } else {
+    ret <- rf
+  }
+  
+  return(ret)
+}
 
 
