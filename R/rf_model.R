@@ -9,7 +9,8 @@
 #' @importFrom Metrics rmse mse
 #' @importFrom caret confusionMatrix
 #' @importFrom pROC roc
-#' @importFrom stats as.formula #' @examples \dontrun{
+#' @importFrom stats as.formula 
+#' @examples \dontrun{
 #' rf_model(train, test, y, optimize = TRUE, evaluate = TRUE)
 #' }
 #' @export
