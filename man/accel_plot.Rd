@@ -2,8 +2,7 @@
 % Please edit documentation in R/plot.R
 \name{accel_plot}
 \alias{accel_plot}
-\title{Plot UKBiobank Accelerometry Data
-This function plots UKBiobank accelerometry data.}
+\title{accel_plot}
 \usage{
 accel_plot(x)
 }

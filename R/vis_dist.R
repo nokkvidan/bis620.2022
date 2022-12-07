@@ -1,10 +1,13 @@
+#' @title vis_dist
 #' @param d diabetes data frame
 #' @importFrom car qqPlot
-#' @examples 
+#' @importFrom graphics hist par
+#' @examples \dontrun{
 #' vis_dist(df)
+#' }
 #' @export
 vis_dist <- function(d) {
-  df_num <- df[, sapply(df, is.numeric)]
+  df_num <- d[, sapply(d, is.numeric)]
   par(mfrow = c(2, 2))
   # Plotting for loop
   for (i in seq_len(ncol(df_num))) {

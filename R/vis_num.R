@@ -1,8 +1,12 @@
+#' @title vis_num
 #' @param d diabetes data frame
-#' @importFrom ggplot2 aes_string ggplot geom_boxplot facet_grid aes theme_bw
+#' @importFrom ggplot2 aes_string ggplot geom_boxplot geom_point
+#' facet_grid aes theme_bw labs theme element_text
 #' @importFrom gridExtra grid.arrange
-#' @examples
+#' @importFrom utils stack
+#' @examples \dontrun{
 #' vis_num(df)
+#' }
 #' @export
 vis_num <- function(d) {
   d_num <- d[, sapply(d, is.numeric)]

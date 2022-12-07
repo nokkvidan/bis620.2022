@@ -1,10 +1,12 @@
+#' @title vis_2vars
 #' @param d diabetes data frame
 #' @param y an arbitrary variable in diabetes data frame
 #' @param x an arbitrary variable in diabetes data frame
-#' @importFrom ggplot2 aes_string ggplot geom_line facet_grid aes
+#' @importFrom ggplot2 ggplot geom_bar geom_violin aes
 
-#' @examples
+#' @examples \dontrun{
 #' vis_2vars(df, 'Diabetes_binary', 'BMI')
+#' }
 #' @export
 vis_2vars <- function(d, y, x) {
   col1 <- d[, x]
@@ -32,4 +34,3 @@ vis_2vars <- function(d, y, x) {
   p <- p + labs(title = title, subtitle = subtitle, x = x, y = y) + theme_bw()
   return(p)
 }
-

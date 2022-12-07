@@ -1,5 +1,7 @@
+#' @title glm_model
 #' @param train training data
 #' @param test testing data
+#' @param y response variable
 #' @param optimize how to optimize the glm
 #' @param evaluate option to evaluate the model
 #' @importFrom MASS stepAIC
@@ -7,9 +9,11 @@
 #' @importFrom Metrics rmse mse
 #' @importFrom caret confusionMatrix
 #' @importFrom pROC roc
-#' @examples
+#' @importFrom stats as.formula glm predict
+#' @examples \dontrun{
 #' glm_model(df, optimize = "manual")
 #' glm_model(train, test, y, "stepAIC", evaluate = TRUE)
+#' }
 #' @export
 glm_model <- function(train, test, y, optimize = NA, evaluate = FALSE) {
   form <- as.formula(paste0(y, "~", "."))
