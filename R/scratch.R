@@ -2,16 +2,13 @@
 #df <- read.csv("~/Desktop/diabetes_binary.csv")
 #df <- read.csv("/Users/nokkvi/Desktop/Yale/F22/F22_BIS620/bis620.2022/data/diabetes_binary_5050split_health_indicators_BRFSS2015.csv")
 
-
-library(ggplot2)
-
 #' @param d diabetes data frame
 #' @param y an arbitrary variable in diabetes data frame
 #' @param x an arbitrary variable in diabetes data frame
 #' @importFrom ggplot2 aes_string ggplot geom_line facet_grid aes
-#' @example \dontrun{
+#' @examples
 #' vis_2vars(df, 'Diabetes_binary', 'BMI')
-#' }
+#' @export
 vis_2vars <- function(d, y, x) {
   col1 <- d[, x]
   col2 <- d[, y]
@@ -39,18 +36,18 @@ vis_2vars <- function(d, y, x) {
   return(p)
 }
 
-d <- df
-x <- "Diabetes_binary"
-y <- "BMI"
-vis.2vars(d, x, y)
+#d <- df
+#x <- "Diabetes_binary"
+#y <- "BMI"
+#vis.2vars(d, x, y)
 
 
 #' @param d diabetes data frame
 #' @importFrom ggplot2 aes_string ggplot geom_boxplot facet_grid aes theme_bw
 #' @importFrom gridExtra grid.arrange
-#' @example \dontrun{
+#' @examples
 #' vis.num(df)
-#' }
+#' @export
 vis.num <- function(d) {
   d_num <- d[, sapply(d, is.numeric)]
   d_num_scaled <- data.frame(
@@ -74,14 +71,14 @@ vis.num <- function(d) {
   return(gridExtra::grid.arrange(p1, p2, ncol = 2))
 }
 
-vis.num(df)
+#vis.num(df)
 
 
 #' @param d diabetes data frame
 #' @importFrom car qqPlot
-#' @example \dontrun{
+#' @examples 
 #' vis_dist(df)
-#' }
+#' @export
 vis_dist <- function(d) {
   df_num <- df[, sapply(df, is.numeric)]
   par(mfrow = c(2, 2))
@@ -94,8 +91,7 @@ vis_dist <- function(d) {
   }
 }
 
-library(predtools)
-library(Metrics)
+
 #' @param train training data
 #' @param test testing data
 #' @param optimize how to optimize the glm
@@ -105,10 +101,10 @@ library(Metrics)
 #' @importFrom Metrics rmse mse
 #' @importFrom caret confusionMatrix
 #' @importFrom pROC roc
-#' @example \dontrun{
+#' @examples
 #' glm_model(df, optimize = "manual")
 #' glm_model(train, test, y, "stepAIC", evaluate = TRUE)
-#' }
+#' @export
 glm_model <- function(train, test, y, optimize = NA, evaluate = FALSE) {
   form <- as.formula(paste0(y, "~", "."))
   fit <- glm(form, data = train)
@@ -177,12 +173,6 @@ glm_model <- function(train, test, y, optimize = NA, evaluate = FALSE) {
 
 ################################################################################
 
-library(car)
-library(xgboost)
-library(caret)
-
-library(pROC)
-library(PRROC)
 #' @param train training data
 #' @param test test data
 #' @param y response variable
@@ -191,11 +181,11 @@ library(PRROC)
 #' @importFrom caret confusionMatrix
 #' @importFrom pROC roc
 #' @importFrom PRROC pr.curve roc.curve
-#' @example \dontrun{
+#' @examples
 #' xg.model <- boost_model(train, test, y, evaluate = TRUE)
 #' plot(xg.model[[5]], main="Out-Of-sample PR curve")
 #' xgb.plot.importance(xg.model[[3]][1:20,])
-#' }
+#' @export
 boost_model <- function(train, test, y, evaluate = FALSE) {
   x_train <- data.matrix(train[, !colnames(train) %in% y])
   y_train <- data.matrix(as.numeric(train[, colnames(train) %in% y]))
@@ -231,7 +221,7 @@ boost_model <- function(train, test, y, evaluate = FALSE) {
 
 
 
-library(randomForest)
+
 #' @param train training data
 #' @param test test data
 #' @param y response variable
@@ -241,9 +231,9 @@ library(randomForest)
 #' @importFrom Metrics rmse mse
 #' @importFrom caret confusionMatrix
 #' @importFrom pROC roc
-#' @example \dontrun{
+#' @examples 
 #' rf_model(train, test, y, optimize = TRUE, evaluate = TRUE)
-#' }
+#' @export
 # Evaluate random forest models
 rf_model <- function(train, test, y, optimize = FALSE, evaluate = FALSE) {
   train[, y] <- as.factor(as.character(train[, y]))
