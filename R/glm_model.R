@@ -54,25 +54,26 @@ glm_model <- function(train, y, test = NA, optimize = NA) {
                                    pred = test_pred,
                                    pred.b = test_pred_b))
     # Calibration plots
-    p1 <- calibration_plot(data = ev_train, obs = "y", pred = "pred",
+    p1 <- predtools::calibration_plot(data = ev_train, obs = "y", pred = "pred",
                            title = "Calibration plot for training data")
-    p2 <- calibration_plot(data = ev_test, obs = "y", pred = "pred",
+    p2 <- predtools::calibration_plot(data = ev_test, obs = "y", pred = "pred",
                            title = "Calibration plot for validation data")
     # MSE and RMSE
-    mse_train <- mse(actual = ev_train$y, predicted = ev_train$pred)
-    rmse_train <- rmse(actual = ev_train$y, predicted = ev_train$pred)
-    mse_test <- mse(actual = ev_test$y, predicted = ev_test$pred)
-    rmse_test <- rmse(actual = ev_test$y, predicted = ev_test$pred)
+    mse_train <- Metrics::mse(actual = ev_train$y, predicted = ev_train$pred)
+    rmse_train <- Metrics::rmse(actual = ev_train$y, predicted = ev_train$pred)
+    mse_test <- Metrics::mse(actual = ev_test$y, predicted = ev_test$pred)
+    rmse_test <- Metrics::rmse(actual = ev_test$y, predicted = ev_test$pred)
     mses <- round(data.frame(MSE = c(mse_train, mse_test),
                              RMSE = c(rmse_train, rmse_test)), 3)
     row.names(mses) <- c("Training", "Validation")
     # Cross table and confusion matrix
     cross_table <- table(predicted = as.logical(ev_test$pred.b),
                          actual = as.logical(ev_test$y))
-    confmat <- confusionMatrix(cross_table, positive = "TRUE")
+    confmat <- caret::confusionMatrix(cross_table, positive = "TRUE")
     results <- list(ev_train, ev_test)
     # ROC
-    test_roc <- roc(ev_test$y ~ ev_test$pred, plot = TRUE, print.auc = TRUE)
+    test_roc <- pROC::roc(ev_test$y ~ ev_test$pred, plot = TRUE,
+                          print.auc = TRUE)
     ret <- list(final_fit, results, p1, p2, mses, confmat, test_roc)
   } else {
     ret <- final_fit

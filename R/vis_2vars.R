@@ -15,22 +15,24 @@ vis_2vars <- function(d, y, x) {
   fac2 <- length(unique(col2)) <= 15
   if (fac1 && fac2) {
     p <- ggplot(d, aes(x = eval(str2lang(x)), fill = eval(str2lang(y)))) +
-      geom_bar(position = "dodge")
+      gggplot2::eom_bar(position = "dodge")
     subtitle <- "Barplot visulization"
   } else if (fac1 && !fac2) {
     p <- ggplot(d) +
-      geom_violin(aes(x = eval(str2lang(x)), y = eval(str2lang(y))))
+      ggplot2::geom_violin(aes(x = eval(str2lang(x)), y = eval(str2lang(y))))
     subtitle <- "Violinplot visulization"
   } else if (!fac1 && fac2) {
     p <- ggplot(d) +
-      geom_violin(aes(x = eval(str2lang(x)), y = eval(str2lang(x))))
+      ggplot2::geom_violin(aes(x = eval(str2lang(x)), y = eval(str2lang(x))))
     subtitle <- "Violinplot visulization"
   } else if (!fac1 && !fac2) {
     p <- ggplot(d) +
-      geom_point(aes(x = eval(str2lang(x)), y = eval(str2lang(y))))
+      ggplot2::geom_point(aes(x = eval(str2lang(x)), y = eval(str2lang(y))))
     subtitle <- "Scatterplot visulization"
   }
   title <- paste0("Visulizing the variables: ", x, " & ", y)
-  p <- p + labs(title = title, subtitle = subtitle, x = x, y = y) + theme_bw()
+  p <- p +
+    ggplot2::labs(title = title, subtitle = subtitle, x = x, y = y) +
+    ggplot2::theme_bw()
   return(p)
 }
