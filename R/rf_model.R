@@ -15,7 +15,7 @@
 #' }
 #' @export
 # Evaluate random forest models
-rf_model <- function(train, test, y, optimize = FALSE, evaluate = FALSE) {
+rf_model <- function(train, y, test = NA, optimize = FALSE) {
   train[, y] <- as.factor(as.character(train[, y]))
   form <- as.formula(paste0(y, "~ ."))
   if (optimize ==  TRUE) {
@@ -31,7 +31,7 @@ rf_model <- function(train, test, y, optimize = FALSE, evaluate = FALSE) {
     rf <- randomForest(form, data = train, ntree = 100, norm.votes = FALSE,
                        do.trace = 10, importance = TRUE)
   }
-  if (evaluate == TRUE) {
+  if (!is.na(test)) {
     pred_train <- predict(rf, type = "prob")
     pred_test <- predict(rf, newdata = test, type = "prob")
     train_pred_b <- as.factor(ifelse(pred_train[, 1] < 0.5, TRUE, FALSE))
