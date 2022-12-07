@@ -1,15 +1,8 @@
-
-#df <- read.csv("~/Desktop/diabetes_binary.csv")
-#df <- read.csv("/Users/nokkvi/Desktop/Yale/F22/F22_BIS620/bis620.2022/data/diabetes_binary_5050split_health_indicators_BRFSS2015.csv")
-
-
-library(ggplot2)
-
 #' @param d diabetes data frame
 #' @param y an arbitrary variable in diabetes data frame
 #' @param x an arbitrary variable in diabetes data frame
 #' @importFrom ggplot2 aes_string ggplot geom_line facet_grid aes
-#' @example \dontrun{
+#' @examples \dontrun{
 #' vis_2vars(df, 'Diabetes_binary', 'BMI')
 #' }
 vis_2vars <- function(d, y, x) {
@@ -39,16 +32,10 @@ vis_2vars <- function(d, y, x) {
   return(p)
 }
 
-d <- df
-x <- "Diabetes_binary"
-y <- "BMI"
-vis.2vars(d, x, y)
-
-
 #' @param d diabetes data frame
 #' @importFrom ggplot2 aes_string ggplot geom_boxplot facet_grid aes theme_bw
 #' @importFrom gridExtra grid.arrange
-#' @example \dontrun{
+#' @examples \dontrun{
 #' vis.num(df)
 #' }
 vis.num <- function(d) {
@@ -74,12 +61,9 @@ vis.num <- function(d) {
   return(gridExtra::grid.arrange(p1, p2, ncol = 2))
 }
 
-vis.num(df)
-
-
 #' @param d diabetes data frame
 #' @importFrom car qqPlot
-#' @example \dontrun{
+#' @examples \dontrun{
 #' vis_dist(df)
 #' }
 vis_dist <- function(d) {
@@ -94,8 +78,6 @@ vis_dist <- function(d) {
   }
 }
 
-library(predtools)
-library(Metrics)
 #' @param train training data
 #' @param test testing data
 #' @param optimize how to optimize the glm
@@ -105,7 +87,7 @@ library(Metrics)
 #' @importFrom Metrics rmse mse
 #' @importFrom caret confusionMatrix
 #' @importFrom pROC roc
-#' @example \dontrun{
+#' @examples \dontrun{
 #' glm_model(df, optimize = "manual")
 #' glm_model(train, test, y, "stepAIC", evaluate = TRUE)
 #' }
@@ -174,15 +156,6 @@ glm_model <- function(train, test, y, optimize = NA, evaluate = FALSE) {
   return(ret)
 }
 
-
-################################################################################
-
-library(car)
-library(xgboost)
-library(caret)
-
-library(pROC)
-library(PRROC)
 #' @param train training data
 #' @param test test data
 #' @param y response variable
@@ -191,7 +164,7 @@ library(PRROC)
 #' @importFrom caret confusionMatrix
 #' @importFrom pROC roc
 #' @importFrom PRROC pr.curve roc.curve
-#' @example \dontrun{
+#' @examples \dontrun{
 #' xg.model <- boost_model(train, test, y, evaluate = TRUE)
 #' plot(xg.model[[5]], main="Out-Of-sample PR curve")
 #' xgb.plot.importance(xg.model[[3]][1:20,])
@@ -241,7 +214,7 @@ library(randomForest)
 #' @importFrom Metrics rmse mse
 #' @importFrom caret confusionMatrix
 #' @importFrom pROC roc
-#' @example \dontrun{
+#' @examples \dontrun{
 #' rf_model(train, test, y, optimize = TRUE, evaluate = TRUE)
 #' }
 # Evaluate random forest models
