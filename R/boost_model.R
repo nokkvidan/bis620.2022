@@ -1,3 +1,4 @@
+#' @title boost_model
 #' @param train training data
 #' @param test test data
 #' @param y response variable
@@ -6,10 +7,12 @@
 #' @importFrom caret confusionMatrix
 #' @importFrom pROC roc
 #' @importFrom PRROC pr.curve roc.curve
-#' @examples
+#' @importFrom stats predict
+#' @examples \dontrun{
 #' xg.model <- boost_model(train, test, y, evaluate = TRUE)
 #' plot(xg.model[[5]], main="Out-Of-sample PR curve")
 #' xgb.plot.importance(xg.model[[3]][1:20,])
+#' }
 #' @export
 boost_model <- function(train, test, y, evaluate = FALSE) {
   x_train <- data.matrix(train[, !colnames(train) %in% y])
@@ -43,4 +46,3 @@ boost_model <- function(train, test, y, evaluate = FALSE) {
   }
   return(ret)
 }
-

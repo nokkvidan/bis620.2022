@@ -1,6 +1,7 @@
 
 #' Plot UKBiobank Accelerometry Data
 #' This function plots UKBiobank accelerometry data.
+#' @title accel_plot
 #' @param x an object inherited from data.frame. It is
 #' assumed to have a `time`, `X`, `Y`, and `Z` column along with
 #' either a `time` or `freq` column.

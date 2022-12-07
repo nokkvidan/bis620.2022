@@ -1,19 +1,22 @@
+#' @title rf_model
 #' @param train training data
 #' @param test test data
 #' @param y response variable
+#' @param optimize how to optimize the model
 #' @param evaluate option to evaluate the model
 #' @importFrom randomForest tuneRF randomForest
 #' @importFrom predtools calibration_plot
 #' @importFrom Metrics rmse mse
 #' @importFrom caret confusionMatrix
 #' @importFrom pROC roc
-#' @examples 
+#' @importFrom stats as.formula #' @examples \dontrun{
 #' rf_model(train, test, y, optimize = TRUE, evaluate = TRUE)
+#' }
 #' @export
 # Evaluate random forest models
 rf_model <- function(train, test, y, optimize = FALSE, evaluate = FALSE) {
   train[, y] <- as.factor(as.character(train[, y]))
-  form <- as.formula(paste0(y, "~", "."))
+  form <- as.formula(paste0(y, "~ ."))
   if (optimize ==  TRUE) {
     # Find the optimal mtry value
     mtry <- tuneRF(train[, !colnames(train) %in% y],

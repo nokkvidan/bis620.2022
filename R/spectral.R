@@ -4,6 +4,7 @@
 #'
 #' The spectral signature is calculated by taking the modulus of the
 #' Fourier coefficients of the signal.
+#' @title spectral_signature
 #' @param x an object inherited from a data.frame with columns X, Y, Z, and time
 #' sorted in time.
 #' @param take_log should the log of the modulus be taken. (Default is `TRUE`)

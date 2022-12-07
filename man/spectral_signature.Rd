@@ -3,7 +3,7 @@
 \name{spectral_signature}
 \alias{spectral_signature}
 \alias{spec_sig}
-\title{Get the Spectral Signature of Accelerometry Data}
+\title{spectral_signature}
 \usage{
 spectral_signature(x, take_log = FALSE, inverse = TRUE)
 }
@@ -21,6 +21,9 @@ a data frame with the modulus of the Fourier coefficients for the
 X, Y, and Z channels.
 }
 \description{
+Get the Spectral Signature of Accelerometry Data
+}
+\details{
 The spectral signature is calculated by taking the modulus of the
 Fourier coefficients of the signal.
 }
