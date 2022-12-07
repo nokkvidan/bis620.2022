@@ -1,4 +1,5 @@
 
+
 #df <- read.csv("~/Desktop/diabetes_binary.csv")
 #df <- read.csv("/Users/nokkvi/Desktop/Yale/F22/F22_BIS620/bis620.2022/data/diabetes_binary_5050split_health_indicators_BRFSS2015.csv")
 
@@ -6,6 +7,7 @@
 #' @param y an arbitrary variable in diabetes data frame
 #' @param x an arbitrary variable in diabetes data frame
 #' @importFrom ggplot2 aes_string ggplot geom_line facet_grid aes
+
 #' @examples
 #' vis_2vars(df, 'Diabetes_binary', 'BMI')
 #' @export
@@ -35,6 +37,7 @@ vis_2vars <- function(d, y, x) {
   p <- p + labs(title = title, subtitle = subtitle, x = x, y = y) + theme_bw()
   return(p)
 }
+
 
 #d <- df
 #x <- "Diabetes_binary"
@@ -71,12 +74,14 @@ vis.num <- function(d) {
   return(gridExtra::grid.arrange(p1, p2, ncol = 2))
 }
 
+
 #vis.num(df)
 
 
 #' @param d diabetes data frame
 #' @importFrom car qqPlot
 #' @examples 
+
 #' vis_dist(df)
 #' @export
 vis_dist <- function(d) {
@@ -90,7 +95,6 @@ vis_dist <- function(d) {
            main = paste("QQ-Plot for ", names(df_num)[i], sep = ""))
   }
 }
-
 
 #' @param train training data
 #' @param test testing data
@@ -170,7 +174,6 @@ glm_model <- function(train, test, y, optimize = NA, evaluate = FALSE) {
   return(ret)
 }
 
-
 ################################################################################
 
 #' @param train training data
@@ -182,6 +185,7 @@ glm_model <- function(train, test, y, optimize = NA, evaluate = FALSE) {
 #' @importFrom pROC roc
 #' @importFrom PRROC pr.curve roc.curve
 #' @examples
+
 #' xg.model <- boost_model(train, test, y, evaluate = TRUE)
 #' plot(xg.model[[5]], main="Out-Of-sample PR curve")
 #' xgb.plot.importance(xg.model[[3]][1:20,])
