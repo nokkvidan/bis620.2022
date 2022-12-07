@@ -17,22 +17,15 @@ boost_model <- function(y, train, test = NULL) {
   x_train <- data.matrix(train[, !colnames(train) %in% y])
   y_train <- data.matrix(as.numeric(train[, colnames(train) %in% y]))
   # convert the train and test data into xgboost matrix type.
-<<<<<<< HEAD
   boost_train <- xgboost::xgb.DMatrix(data = x_train, label = y_train)
   boost_test <- xgboost::xgb.DMatrix(data = x_test, label = y_test)
   # train a model using our training data
   model <- xgboost::xgboost(data = boost_train, max.depth = 15, nrounds = 30)
-  if (!is.na(test)) {
-=======
-  boost_train <- xgb.DMatrix(data = x_train, label = y_train)
-  # train a model using our training data
-  model <- xgboost(data = boost_train, max.depth = 15, nrounds = 30)
   if (!is.null(test)) {
     # convert the train and test data into xgboost matrix type.
     x_test <- data.matrix(test[, !colnames(test) %in% y])
     y_test <- data.matrix(as.numeric(test[, colnames(test) %in% y]))
     boost_test <- xgb.DMatrix(data = x_test, label = y_test)
->>>>>>> 27d0bf6c606fbe560734b76cb19183903311ac3d
     # use model to make predictions on test data
     pred_test <- predict(model, boost_test)
     pred_test_b <- as.factor(ifelse(pred_test > 0.5, 1, 0))
