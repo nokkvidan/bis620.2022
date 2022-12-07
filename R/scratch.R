@@ -1,5 +1,7 @@
 
-df <- read.csv("diabetes_binary_5050split_health_indicators_BRFSS2015.csv")
+#df <- read.csv("diabetes_binary_5050split_health_indicators_BRFSS2015.csv")
+df <- read.csv("~/Desktop/diabetes_binary.csv")
+
 
 library(ggplot2)
 
@@ -51,6 +53,8 @@ vis.2vars(d, x, y)
 
 
 #' @param d diabetes data frame
+#' @importFrom ggplot2 aes_string ggplot geom_line facet_grid aes
+#' @importFrom gridExtra grid.arrange
 #' @example \dontrun{
 #' vis.num(df)
 #' }
@@ -83,6 +87,7 @@ vis.num(df)
 
 
 #' @param d diabetes data frame
+#' @importFrom car qqPlot
 #' @example \dontrun{
 #' vis.dist(df)
 #' }
@@ -99,11 +104,18 @@ vis.dist <- function(d) {
   }
 }
 
-vis.dist(df)
+#vis.dist(df)
 
 
 #' @param d data
 #' @param optimize
+#' @importFrom xgboost xgb.DMatrix xgboost xgb.importance
+#' @importFrom caret 
+#' @importFrom car qqPlot
+#' @importFrom pROC
+#' @importFrom PRROC
+#' @importFrom ROCR
+#' @importFrom MASS stepAIC
 #' @example \dontrun{
 #' glm.model(df, optimize = 'manual')
 #' glm.model(df, optimize = 'stepAIC')
@@ -149,10 +161,11 @@ glm.model <- function(d, optimize = NA) {
   return(final.fit)
 }
 
-glm.model(df, 'stepAIC')
+#glm.model(df, 'stepAIC')
 
 ################################################################################
 
+library(car)
 library(xgboost)
 library(caret)
 # Splitting up the data into train and test data sets
@@ -191,6 +204,7 @@ xgb.plot.importance(importance_matrix[1:20,])
 roc_test <- roc(y.test, pred_test, algorithm = 2,
                 plot = TRUE, print.auc = TRUE) 
 
+
 library(pROC)
 library(PRROC)
 library(ROCR)
@@ -205,6 +219,7 @@ roc$auc
 pr
 
 plot(pr, main="Out-Of-sample PR curve")
+
 
 
 
