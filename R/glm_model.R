@@ -15,7 +15,7 @@
 #' glm_model(train, test, y, "stepAIC", evaluate = TRUE)
 #' }
 #' @export
-glm_model <- function(train, test, y, optimize = NA, evaluate = FALSE) {
+glm_model <- function(train, y, test = NA, optimize = NA) {
   form <- as.formula(paste0(y, "~", "."))
   fit <- glm(form, data = train)
   sum <- summary(fit)
@@ -40,7 +40,7 @@ glm_model <- function(train, test, y, optimize = NA, evaluate = FALSE) {
                               paste(sigvars, collapse = "+")))
     final_fit <- glm(form2, data = train)
   }
-  if (evaluate == TRUE) {
+  if (!is.na(test)) {
     # Set up training results
     train_pred <- predict(final_fit, type = "response")
     train_pred_b <- ifelse(train_pred > 0.5, 1, 0)

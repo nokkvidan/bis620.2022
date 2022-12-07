@@ -14,7 +14,7 @@
 #' xgb.plot.importance(xg.model[[3]][1:20,])
 #' }
 #' @export
-boost_model <- function(train, test, y, evaluate = FALSE) {
+boost_model <- function(train, y, test = NA) {
   x_train <- data.matrix(train[, !colnames(train) %in% y])
   y_train <- data.matrix(as.numeric(train[, colnames(train) %in% y]))
   x_test <- data.matrix(test[, !colnames(test) %in% y])
@@ -24,7 +24,7 @@ boost_model <- function(train, test, y, evaluate = FALSE) {
   boost_test <- xgb.DMatrix(data = x_test, label = y_test)
   # train a model using our training data
   model <- xgboost(data = boost_train, max.depth = 15, nrounds = 30)
-  if (evaluate == TRUE) {
+  if (!is.na(test)) {
     # use model to make predictions on test data
     pred_test <- predict(model, boost_test)
     pred_test_b <- as.factor(ifelse(pred_test > 0.5, 1, 0))
