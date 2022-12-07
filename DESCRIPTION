@@ -22,5 +22,15 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0),
     vdiffr
+    MASS
+    Metrics
+    PRROC
+    car
+    caret
+    gridExtra
+    pROC
+    predtools
+    randomForest
+    xgboost
 Config/testthat/edition: 3
 VignetteBuilder: knitr
