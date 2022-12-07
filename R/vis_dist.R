@@ -13,7 +13,7 @@ vis_dist <- function(d) {
   for (i in seq_len(ncol(df_num))) {
     hist(df_num[, i], col = "red", pch = 19, xlab = names(df_num)[i],
          main = paste("Histogram of ", names(df_num)[i], sep = ""))
-    qqPlot(df_num[, i], col = "red", pch = 19, ylab = names(df_num)[i],
+    car::qqPlot(df_num[, i], col = "red", pch = 19, ylab = names(df_num)[i],
            main = paste("QQ-Plot for ", names(df_num)[i], sep = ""))
   }
 }
