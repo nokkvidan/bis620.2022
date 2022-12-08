@@ -9,10 +9,7 @@ License: LGPL (>= 2.1)
 Encoding: UTF-8
 RoxygenNote: 7.2.2
 Imports: 
-  dplyr,
   ggplot2,
-  purrr,
-  tidyr,
   MASS,
   Metrics,
   PRROC,
@@ -34,3 +31,4 @@ Suggests:
     vdiffr
 Config/testthat/edition: 3
 VignetteBuilder: knitr
+LazyData: true
