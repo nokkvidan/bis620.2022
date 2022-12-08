@@ -42,41 +42,44 @@ The dataset `diabetes` from Kaggle is part of the package and is available for u
 
 The diabetes risk prediction R project also includes a suite of visualization functions that allow for the exploratory analysis of the dataset used to train the prediction model. These functions provide an interactive and intuitive way to explore the relationship between different variables and the likelihood of a patient having diabetes.
 
+#### Visualize interactions (2 variables)
+
+Using the function `vis_2vars()` we can visualize the interaction of any two variables in the dataset. The function can determine what type the variables are and plots the different output based on that. The options are bar-, violin-, and scatter plots.
+
 ```{r vis2}
-# Visualize any two variables in the dataset
 p1 <- vis_2vars(diabetes, "Diabetes_binary", "BMI")
 p2 <- vis_2vars(diabetes, "Diabetes_binary", "PhysHlth")
 p3 <- vis_2vars(diabetes, "Diabetes_binary", "Sex")
 p4 <- vis_2vars(diabetes, "Diabetes_binary", "Age")
-
-gridExtra::grid.arrange(p1, p2, p3, p4)
+# gridExtra::grid.arrange(p1, p2, p3, p4)
 ```
 
+#### Visualise numeric variables
+
+Using the function `vis_num()` we can get an overview of the numeric variables in our data set and how they could potentially used if scaled to the same scale of $[0,1]$. Thus, this function visulizes all the non categorical variables in the dataset with boxplots.
 
 ```{r visnum}
-# Visualize all the non categorical variables in the dataset with boxplots
-vis_num(diabetes)
+p5 <- vis_num(diabetes)
 ```
 
+#### Visualise distributions of numeric variables
 
-```{r}
-# Visualize distribution of all non categorical variables in given data 
-# vis_dist(diabetes[, 1:3])
+Using the function `vis_dist()` we see more detailed distribution plots of the numeric variables that we want to investigate. The plot includes a qqplot and a histrogram of the numeric variables in the dataset provided.
+
+From the plot above we might want to consider visualizing `BMI` and `MentHlth` as they are a bit skewed. We also add in `Sex` to show that it won't be in the output
+
+```{r visdist}
+# df_dist <- diabetes[, c("BMI", "MentHlth", "Sex")]
+# vis_dist(df_dist)
 ```
+
+#### Summary of EDA functions
 
 Overall, these visualization functions provide a powerful tool for the exploration and analysis of the dataset, and can help researchers gain a better understanding of the factors that influence the likelihood of a patient having diabetes.
 
 ## Modeling and Evaluation
 
-The R package allows health care professionals to easily model and evaluate generalized linear models (GLM), XGBoost, and random forests for identifying significant variables correlated with diabetes. With these functions, health care professionals can quickly fit these models to their data and assess the performance of each model to determine the best approach for their specific use case. To be able to evaluate the performance one must split the data set into training and test sets.
-
-```{r splitting}
-# set.seed(1)
-# diabetes <- data(diabetes)
-# sample <- sample(c(1, 2), nrow(diabetes), replace = TRUE, prob = c(0.8, 0.2))
-# train <- diabetes[sample == 1, ]
-# test <- diabetes[sample == 2, ]
-```
+The R package allows health care professionals to easily model and evaluate generalized linear models (GLM), XGBoost, and random forests for identifying significant variables correlated with diabetes. With these functions, health care professionals can quickly fit these models to their data and assess the performance of each model to determine the best approach for their specific use case. To be able to evaluate the performance one must split the data set into training and test sets (shown above).
 
 In addition, the package offers a range of evaluation metrics and visualization tools to help users interpret the results of the model and make informed decisions about the factors associated with diabetes. Overall, the functions provide a convenient and user-friendly solution for health care professionals looking to use machine learning methods to analyze diabetes data.
 
@@ -96,15 +99,4 @@ In addition, the package offers a range of evaluation metrics and visualization 
 # xg_fit <- boost_model("Diabetes_binary", train, test)
 ```
 
-# Contributing
-
-We welcome contributions to the `bis620.2022` package. If you would like to contribute, please follow these steps:
-
-1. Fork the repository and clone it to your local machine.
-2. Create a new branch for your changes.
-3. Make your changes and push them to your fork.
-4. Open a pull request and describe your changes.
-
-# License
-
-The `bis620.2022` package is (not) licensed under the MIT License.
+# Results
