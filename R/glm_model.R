@@ -14,7 +14,7 @@
 #' glm_model(train, test, y, "stepAIC", evaluate = TRUE)
 #' }
 #' @export
-glm_model <- function(train, y, test = NULL, optimize = NA) {
+glm_model <- function(y, train, test = NULL, optimize = NA) {
   form <- as.formula(paste0(y, "~", "."))
   fit <- glm(form, data = train)
   sum <- summary(fit)
