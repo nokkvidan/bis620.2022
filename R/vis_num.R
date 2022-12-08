@@ -9,9 +9,11 @@
 #' }
 #' @export
 vis_num <- function(d) {
+  # Creating the two dfs to be plotted
   d_num <- d[, sapply(d, is.numeric)]
   d_num_scaled <- data.frame(
     apply(d_num, 2, function(x) (x - min(x)) / (max(x) - min(x))))
+  # Creating the plots
   p1 <- ggplot(stack(d_num), aes(x = ind, y = values)) +
     ggplot2::geom_boxplot() +
     ggplot2::labs(title = "Visulizing Numeric Variables",

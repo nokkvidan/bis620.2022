@@ -18,7 +18,6 @@ boost_model <- function(y, train, test = NULL) {
   y_train <- data.matrix(as.numeric(train[, colnames(train) %in% y]))
   # convert the train and test data into xgboost matrix type.
   boost_train <- xgboost::xgb.DMatrix(data = x_train, label = y_train)
-  boost_test <- xgboost::xgb.DMatrix(data = x_test, label = y_test)
   # train a model using our training data
   model <- xgboost::xgboost(data = boost_train, max.depth = 15, nrounds = 30)
   if (!is.null(test)) {
