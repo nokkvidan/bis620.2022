@@ -15,21 +15,21 @@ vis_2vars <- function(d, y, x) {
   if (fac1 && fac2) {
     p <- ggplot(d, aes(x = eval(str2lang(x)), fill = eval(str2lang(y)))) +
       ggplot2::geom_bar(position = "dodge")
-    subtitle <- "Barplot visulization"
+    subtitle <- "Barplot visualization"
   } else if (fac1 && !fac2) {
     p <- ggplot(d) +
       ggplot2::geom_violin(aes(x = eval(str2lang(x)), y = eval(str2lang(y))))
-    subtitle <- "Violinplot visulization"
+    subtitle <- "Violinplot visualization"
   } else if (!fac1 && fac2) {
     p <- ggplot(d) +
       ggplot2::geom_violin(aes(x = eval(str2lang(x)), y = eval(str2lang(x))))
-    subtitle <- "Violinplot visulization"
+    subtitle <- "Violinplot visualization"
   } else if (!fac1 && !fac2) {
     p <- ggplot(d) +
       ggplot2::geom_point(aes(x = eval(str2lang(x)), y = eval(str2lang(y))))
-    subtitle <- "Scatterplot visulization"
+    subtitle <- "Scatterplot visualization"
   }
-  title <- paste0("Visulizing the variables: ", x, " & ", y)
+  title <- paste0("Variables: ", x, " & ", y)
   p <- p +
     ggplot2::labs(title = title, subtitle = subtitle, x = x, y = y) +
     ggplot2::theme_bw()

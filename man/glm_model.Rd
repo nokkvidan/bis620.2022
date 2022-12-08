@@ -4,12 +4,12 @@
 \alias{glm_model}
 \title{glm_model}
 \usage{
-glm_model(train, y, test = NULL, optimize = NA)
+glm_model(y, train, test = NULL, optimize = NA)
 }
 \arguments{
-\item{train}{training data}
-
 \item{y}{response variable}
+
+\item{train}{training data}
 
 \item{test}{testing data}
 
