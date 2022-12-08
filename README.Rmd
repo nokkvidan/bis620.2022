@@ -62,38 +62,53 @@ The package includes the following functions:
 * `vis_num()`: Visualize the non categorical variables in the dataset with boxplots. Shows both scaled and non scaled variables.
 * `glm_model()`: Fits a GLM to the input data and returns the model object.
 * `boost_model()`: Fits an XGBoost model to the input data and returns the model object.
-* `rf_model()`: Fits a random forest model to the input data and returns the model object. 
+* `rf_model()`: Fits a random forest model to the input data and returns the model object.
 
 ## EDA
 
 The diabetes risk prediction R project also includes a suite of visualization functions that allow for the exploratory analysis of the dataset used to train the prediction model. These functions provide an interactive and intuitive way to explore the relationship between different variables and the likelihood of a patient having diabetes.
 
 ```{r}
-# vis_2vars()
-# vis_dist()
-# vis_num()
+# Visualize any two variables in the dataset, diabetes and BMI for example
+# vis_2vars(df, "Diabetes_binary", "BMI")
+
+# Visualize all the non categorical variables in the dataset with boxplots
+# vis_num(df)
+
+# Visualize distribution of all non categorical variables in given data 
+# vis_dist(df[, 1:3])
 ```
 
 Overall, these visualization functions provide a powerful tool for the exploration and analysis of the dataset, and can help researchers gain a better understanding of the factors that influence the likelihood of a patient having diabetes.
 
 ## Modeling and Evaluation
 
-The R package allows health care professionals to easily model and evaluate generalized linear models (GLM), XGBoost, and random forests for identifying significant variables correlated with diabetes. With these functions, health care professionals can quickly fit these models to their data and assess the performance of each model to determine the best approach for their specific use case. In addition, the package offers a range of evaluation metrics and visualization tools to help users interpret the results of the model and make informed decisions about the factors associated with diabetes. Overall, the functions provide a convenient and user-friendly solution for health care professionals looking to use machine learning methods to analyze diabetes data.
+The R package allows health care professionals to easily model and evaluate generalized linear models (GLM), XGBoost, and random forests for identifying significant variables correlated with diabetes. With these functions, health care professionals can quickly fit these models to their data and assess the performance of each model to determine the best approach for their specific use case. To be able to evaluate the performance one must split the data set into training and test sets.
+
+```{r splitting}
+# set.seed(1)
+# df <- data(diabetes)
+# sample <- sample(c(1, 2), nrow(df), replace = TRUE, prob = c(0.8, 0.2))
+# train <- df[sample == 1, ]
+# test <- df[sample == 2, ]
+```
+
+In addition, the package offers a range of evaluation metrics and visualization tools to help users interpret the results of the model and make informed decisions about the factors associated with diabetes. Overall, the functions provide a convenient and user-friendly solution for health care professionals looking to use machine learning methods to analyze diabetes data.
 
 ```{r}
 # # Fit a GLM to the diabetes data
-# glm_model() 
+# glm_fit0 <- glm_model(df, "Diabetes_binary")
 # # Fit a random forest model to the diabetes data
-# rf_model()
+# rf_fit0 <- rf_model("Diabetes_binary", df)
 # # Fit an XGBoost model to the diabetes data
-# boost_model()
+# xg_fit0 <- boost_model("Diabetes_binary", df)
 
 # # Fit and evaluate the performance of the GLM model
-# glm_model() 
-# # Fit and evaluate the performance of the XGBoost model
-# boost_model()
+# glm_fit <- glm_model(df, "Diabetes_binary", test, optimize = "manual")
 # # Fit and evaluate the performance of the random forest model
-# rf_model()
+# rf_fit <- rf_model("Diabetes_binary", train, test, optimize = TRUE)
+# # Fit and evaluate the performance of the XGBoost model
+# xg_fit <- boost_model("Diabetes_binary", train, test)
 ```
 
 # Contributing
@@ -107,4 +122,4 @@ We welcome contributions to the `bis620.2022` package. If you would like to cont
 
 # License
 
-The `bis620.2022` package is licensed under the MIT License.
+The `bis620.2022` package is (not) licensed under the MIT License.
