@@ -12,7 +12,7 @@ vis_num <- function(d) {
   d_num <- d[, sapply(d, is.numeric)]
   d_num_scaled <- data.frame(
     apply(d_num, 2, function(x) (x - min(x)) / (max(x) - min(x))))
-  p1 <- ggplot(stack(d_num), aes(x = utils::ind, y = utils::values)) +
+  p1 <- ggplot(stack(d_num), aes(x = ind, y = values)) +
     ggplot2::geom_boxplot() +
     ggplot2::labs(title = "Visulizing Numeric Variables",
                   subtitle = "Boxplot visulization",
@@ -21,7 +21,7 @@ vis_num <- function(d) {
     ggplot2::theme_bw() +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90,
                                                        vjust = 0.5, hjust = 1))
-  p2 <- ggplot(stack(d_num_scaled), aes(x = utils::ind, y = utils::values)) +
+  p2 <- ggplot(stack(d_num_scaled), aes(x = ind, y = values)) +
     ggplot2::geom_boxplot() +
     ggplot2::labs(title = "Visulizing Scaled Numeric Variables",
                   subtitle = "Boxplot visulization",
