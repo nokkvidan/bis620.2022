@@ -9,6 +9,8 @@
 #' }
 #' @export
 vis_num <- function(d) {
+  bin <- apply(d, 2, function(x) length(unique(x)) == 2)
+  d[, bin] <- sapply(d[, bin], as.logical)
   # Creating the two dfs to be plotted
   d_num <- d[, sapply(d, is.numeric)]
   d_num_scaled <- data.frame(
