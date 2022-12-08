@@ -3,7 +3,6 @@
 #' @param y an arbitrary variable in diabetes data frame
 #' @param x an arbitrary variable in diabetes data frame
 #' @importFrom ggplot2 ggplot geom_bar geom_violin aes
-
 #' @examples \dontrun{
 #' vis_2vars(df, 'Diabetes_binary', 'BMI')
 #' }
@@ -15,7 +14,7 @@ vis_2vars <- function(d, y, x) {
   fac2 <- length(unique(col2)) <= 15
   if (fac1 && fac2) {
     p <- ggplot(d, aes(x = eval(str2lang(x)), fill = eval(str2lang(y)))) +
-      gggplot2::eom_bar(position = "dodge")
+      ggplot2::geom_bar(position = "dodge")
     subtitle <- "Barplot visulization"
   } else if (fac1 && !fac2) {
     p <- ggplot(d) +
