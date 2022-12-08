@@ -22,13 +22,19 @@ knitr::opts_chunk$set(
 [![Codecov](https://codecov.io/gh/nokkvidan/bis620.2022/branch/main/graph/badge.svg?token=U4USARWKRM)](https://codecov.io/gh/nokkvidan/bis620.2022)
 <!-- badges: end -->
 
-The diabetes risk prediction R project aims to help healthcare professionals determine if a patient has or will have diabetes based on various health indicators such as age and BMI to name a few. This is accomplished through machine learning algorithms that analyze a large dataset of patients with known diabetes status and health indicators. They use that information to create a model that can accurately predict the likelihood of a patient having diabetes. The machine learning algorithms that are available to model, optimize and evaluate performance are generalized linear model, XGBoost and random forests.
+# Motivations
 
-By using this project, healthcare professionals can quickly and accurately determine the likelihood of a patient's diabetes, allowing for earlier detection and treatment. This can ultimately improve patient outcomes and reduce the overall burden of diabetes on the healthcare system.
+It is estimated that 1 in 10 people in America have diabetes and 1 in 5 of those with the health condition have not been clinically diagnosed [1]. Type 1 diabetes occurs when the body is unable to produce insulin and is inherited from their family, but type 2 diabetes occurs when the body is unable to use insulin properly and can be prevented or delayed with improvements to a patient's lifestyle. 
+
+Our goal is to identify what kinds of health indicators might be linked with Type 2 diabetes and pre-diabetes.
+
+By using this project, healthcare professionals will be able to quickly determine the likelihood of a patient's susceptibility to diabetes, allowing for earlier detection and providing guidelines to inform lifestyle changes and treatments. This can ultimately improve individual patient outcomes and reduce the overall proportion of diabetes in the population.
 
 Additionally, this project can help researchers study the significant correlation between specific health indicators and the likelihood of developing diabetes. By using the functions provided in this project, researchers can quickly analyze the relationship between different variables and diabetes, potentially uncovering new insights into the causes and risk factors of the condition.
 
-The dataset `diabetes` from Kaggle is part of the package and is available for use in examples as seen here below in the example section.
+To accomplish this goal, we developed this diabetes risk prediction R package which helps facilitate the analysis of health indicators such as age, BMI, and sex. Through a number of machine learning algorithms we can analyze a large Kaggle data set of patients with known diabetes status and health indicators [2]. Theses algorithms use a combination of continuous and categorical variables to create a model that can predict the likelihood of a patient having diabetes. The following models are available in this package as functions: generalized linear model, XGBoost and random forests. These functions also include additional options for optimization and evaluation.
+
+The data set `diabetes` has been attached to the package and is available to use as demonstrated in the example section below.
 
 ### Badge overview
 
@@ -64,52 +70,12 @@ The package includes the following functions:
 * `boost_model()`: Fits an XGBoost model to the input data and returns the model object.
 * `rf_model()`: Fits a random forest model to the input data and returns the model object.
 
-## EDA
-
-The diabetes risk prediction R project also includes a suite of visualization functions that allow for the exploratory analysis of the dataset used to train the prediction model. These functions provide an interactive and intuitive way to explore the relationship between different variables and the likelihood of a patient having diabetes.
-
+# Examples
 ```{r}
-# Visualize any two variables in the dataset, diabetes and BMI for example
-# vis_2vars(df, "Diabetes_binary", "BMI")
-
-# Visualize all the non categorical variables in the dataset with boxplots
-# vis_num(df)
-
-# Visualize distribution of all non categorical variables in given data 
-# vis_dist(df[, 1:3])
+data(diabetes)
+vis_2vars(df, 'Diabetes_binary', 'BMI')
 ```
 
-Overall, these visualization functions provide a powerful tool for the exploration and analysis of the dataset, and can help researchers gain a better understanding of the factors that influence the likelihood of a patient having diabetes.
-
-## Modeling and Evaluation
-
-The R package allows health care professionals to easily model and evaluate generalized linear models (GLM), XGBoost, and random forests for identifying significant variables correlated with diabetes. With these functions, health care professionals can quickly fit these models to their data and assess the performance of each model to determine the best approach for their specific use case. To be able to evaluate the performance one must split the data set into training and test sets.
-
-```{r splitting}
-# set.seed(1)
-# df <- data(diabetes)
-# sample <- sample(c(1, 2), nrow(df), replace = TRUE, prob = c(0.8, 0.2))
-# train <- df[sample == 1, ]
-# test <- df[sample == 2, ]
-```
-
-In addition, the package offers a range of evaluation metrics and visualization tools to help users interpret the results of the model and make informed decisions about the factors associated with diabetes. Overall, the functions provide a convenient and user-friendly solution for health care professionals looking to use machine learning methods to analyze diabetes data.
-
-```{r}
-# # Fit a GLM to the diabetes data
-# glm_fit0 <- glm_model(df, "Diabetes_binary")
-# # Fit a random forest model to the diabetes data
-# rf_fit0 <- rf_model("Diabetes_binary", df)
-# # Fit an XGBoost model to the diabetes data
-# xg_fit0 <- boost_model("Diabetes_binary", df)
-
-# # Fit and evaluate the performance of the GLM model
-# glm_fit <- glm_model(df, "Diabetes_binary", test, optimize = "manual")
-# # Fit and evaluate the performance of the random forest model
-# rf_fit <- rf_model("Diabetes_binary", train, test, optimize = TRUE)
-# # Fit and evaluate the performance of the XGBoost model
-# xg_fit <- boost_model("Diabetes_binary", train, test)
-```
 
 # Contributing
 
@@ -123,3 +89,9 @@ We welcome contributions to the `bis620.2022` package. If you would like to cont
 # License
 
 The `bis620.2022` package is (not) licensed under the MIT License.
+
+# Citations 
+
+[1]  “The Facts, Stats, and Impacts of Diabetes.” CDC, Centers of Disease Control and Prevention, https://www.cdc.gov/diabetes/library/spotlights/diabetes-facts-stats.html. 
+
+[2] “Diabetes Health Indicators Data Set.” Kaggle, https://www.kaggle.com/datasets/alexteboul/diabetes-health-indicators-dataset. 
