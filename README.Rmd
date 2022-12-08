@@ -73,7 +73,7 @@ The package includes the following functions:
 # Examples
 ```{r}
 data(diabetes)
-vis_2vars(df, 'Diabetes_binary', 'BMI')
+vis_2vars(diabetes, 'Diabetes_binary', 'BMI')
 ```
 
 
