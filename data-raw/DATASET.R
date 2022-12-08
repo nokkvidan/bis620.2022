@@ -1,4 +1,4 @@
 ## code to prepare `DATASET` dataset goes here
 
-ukb_accel <- readRDS("accel.rds")
-usethis::use_data(ukb_accel, overwrite = TRUE)
+diabetes <- read.csv("diabetes_binary.csv")
+usethis::use_data(diabetes, overwrite = TRUE)
