@@ -7,6 +7,8 @@
 #' }
 #' @export
 vis_dist <- function(d) {
+  bin <- apply(d, 2, function(x) length(unique(x)) == 2)
+  d[, bin] <- sapply(d[, bin], as.logical)
   df_num <- d[, sapply(d, is.numeric)]
   par(mfrow = c(2, 2))
   # Plotting for loop

@@ -15,5 +15,96 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
+# Load the library
 library(bis620.2022)
+
+# Load the data
+data(diabetes)
+
+# Splitting the dataset for train and test
+set.seed(1)
+sample <- sample(c(1, 2), nrow(diabetes), replace = TRUE, prob = c(.8, .2))
+train <- diabetes[sample == 1, ]
+test <- diabetes[sample == 2, ]
 ```
+
+# Motivations
+
+The diabetes risk prediction R project aims to help healthcare professionals determine if a patient has or will have diabetes based on various health indicators such as age and BMI to name a few. This is accomplished through machine learning algorithms that analyze a large dataset of patients with known diabetes status and health indicators. They use that information to create a model that can accurately predict the likelihood of a patient having diabetes. The machine learning algorithms that are available to model, optimize and evaluate performance are generalized linear model, XGBoost and random forests.
+
+By using this project, healthcare professionals can quickly and accurately determine the likelihood of a patient's diabetes, allowing for earlier detection and treatment. This can ultimately improve patient outcomes and reduce the overall burden of diabetes on the healthcare system.
+
+Additionally, this project can help researchers study the significant correlation between specific health indicators and the likelihood of developing diabetes. By using the functions provided in this project, researchers can quickly analyze the relationship between different variables and diabetes, potentially uncovering new insights into the causes and risk factors of the condition.
+
+The dataset `diabetes` from Kaggle is part of the package and is available for use in examples as seen here below in the example section.
+
+## EDA
+
+The diabetes risk prediction R project also includes a suite of visualization functions that allow for the exploratory analysis of the dataset used to train the prediction model. These functions provide an interactive and intuitive way to explore the relationship between different variables and the likelihood of a patient having diabetes.
+
+```{r vis2}
+# Visualize any two variables in the dataset
+p1 <- vis_2vars(diabetes, "Diabetes_binary", "BMI")
+p2 <- vis_2vars(diabetes, "Diabetes_binary", "PhysHlth")
+p3 <- vis_2vars(diabetes, "Diabetes_binary", "Sex")
+p4 <- vis_2vars(diabetes, "Diabetes_binary", "Age")
+
+gridExtra::grid.arrange(p1, p2, p3, p4)
+```
+
+
+```{r visnum}
+# Visualize all the non categorical variables in the dataset with boxplots
+vis_num(diabetes)
+```
+
+
+```{r}
+# Visualize distribution of all non categorical variables in given data 
+# vis_dist(diabetes[, 1:3])
+```
+
+Overall, these visualization functions provide a powerful tool for the exploration and analysis of the dataset, and can help researchers gain a better understanding of the factors that influence the likelihood of a patient having diabetes.
+
+## Modeling and Evaluation
+
+The R package allows health care professionals to easily model and evaluate generalized linear models (GLM), XGBoost, and random forests for identifying significant variables correlated with diabetes. With these functions, health care professionals can quickly fit these models to their data and assess the performance of each model to determine the best approach for their specific use case. To be able to evaluate the performance one must split the data set into training and test sets.
+
+```{r splitting}
+# set.seed(1)
+# diabetes <- data(diabetes)
+# sample <- sample(c(1, 2), nrow(diabetes), replace = TRUE, prob = c(0.8, 0.2))
+# train <- diabetes[sample == 1, ]
+# test <- diabetes[sample == 2, ]
+```
+
+In addition, the package offers a range of evaluation metrics and visualization tools to help users interpret the results of the model and make informed decisions about the factors associated with diabetes. Overall, the functions provide a convenient and user-friendly solution for health care professionals looking to use machine learning methods to analyze diabetes data.
+
+```{r}
+# # Fit a GLM to the diabetes data
+# glm_fit0 <- glm_model(diabetes, "Diabetes_binary")
+# # Fit a random forest model to the diabetes data
+# rf_fit0 <- rf_model("Diabetes_binary", diabetes)
+# # Fit an XGBoost model to the diabetes data
+# xg_fit0 <- boost_model("Diabetes_binary", diabetes)
+
+# # Fit and evaluate the performance of the GLM model
+# glm_fit <- glm_model(diabetes, "Diabetes_binary", test, optimize = "manual")
+# # Fit and evaluate the performance of the random forest model
+# rf_fit <- rf_model("Diabetes_binary", train, test, optimize = TRUE)
+# # Fit and evaluate the performance of the XGBoost model
+# xg_fit <- boost_model("Diabetes_binary", train, test)
+```
+
+# Contributing
+
+We welcome contributions to the `bis620.2022` package. If you would like to contribute, please follow these steps:
+
+1. Fork the repository and clone it to your local machine.
+2. Create a new branch for your changes.
+3. Make your changes and push them to your fork.
+4. Open a pull request and describe your changes.
+
+# License
+
+The `bis620.2022` package is (not) licensed under the MIT License.
