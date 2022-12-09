@@ -5,7 +5,7 @@ test_that(
   {
     data(diabetes)
     df_dist <- diabetes[, c("Diabetes_binary", "Sex")]
-    vis_num(df_dist)
+    expect_error(vis_num(df_dist))
   }
 )
 
