@@ -15,6 +15,20 @@
 #' @export
 # Evaluate random forest models
 rf_model <- function(y, train, test = NULL, optimize = FALSE) {
+  # Check parameters
+  if (y %!in% colnames(train)) {
+    stop(paste0(y, " is not a variable in your train data"))
+  }
+  if (!is.null(test)){
+    cols <- length(setdiff(colnames(train), colnames(test)))
+    if(cols != 0){
+      stop("The column titles of your train and test sets do not match")
+    }
+  }
+  if (optimize %!in% c(TRUE, FALSE)){
+    stop("Please pick a valid optimizer: TRUE or FALSE")
+  }
+  # Begin the function
   train[, y] <- as.factor(as.character(train[, y]))
   form <- as.formula(paste0(y, "~ ."))
   if (optimize ==  TRUE) {
