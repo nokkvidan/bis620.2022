@@ -7,13 +7,18 @@
 vis_dist(d)
 }
 \arguments{
-\item{d}{diabetes data frame}
+\item{d}{a data frame}
+}
+\value{
+a historgram and qqPlot for all continuous variables in given data
 }
 \description{
-vis_dist
+Visualize the distributions of the non categorical variables in
+the data set
 }
 \examples{
 \dontrun{
-vis_dist(df)
+data(diabetes)
+vis_dist(diabetes)
 }
 }

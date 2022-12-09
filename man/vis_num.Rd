@@ -7,13 +7,20 @@
 vis_num(d)
 }
 \arguments{
-\item{d}{diabetes data frame}
+\item{d}{a data frame}
+}
+\value{
+a grid.arrange of two ggplots: one of side by side boxplots of the
+raw data for the numeric variables and one of side by side boxplots of the
+scaled data for the numeric variables such that they all lie between 0 and 1
 }
 \description{
-vis_num
+Visualize the non categorical variables in the dataset with
+boxplots. Shows both scaled and non scaled variables
 }
 \examples{
 \dontrun{
-vis_num(df)
+data(diabetes)
+vis_num(diabetes)
 }
 }
