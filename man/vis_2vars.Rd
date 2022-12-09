@@ -7,17 +7,23 @@
 vis_2vars(d, x, y)
 }
 \arguments{
-\item{d}{diabetes data frame}
+\item{d}{a data frame}
 
-\item{x}{an arbitrary variable in diabetes data frame}
+\item{x}{an arbitrary character variable in diabetes data frame}
 
-\item{y}{an arbitrary variable in diabetes data frame}
+\item{y}{an arbitrary character variable in diabetes data frame}
+}
+\value{
+a ggplot depending on the types of variables. Returns a violin
+plot for one continuous and one factor variable, returns a bar plot for two
+factor variables, and returns a scatterplot for two continuous variables
 }
 \description{
-vis_2vars
+Visualize any two variables in the dataset
 }
 \examples{
 \dontrun{
-vis_2vars(df, 'Diabetes_binary', 'BMI')
+data(diabetes)
+vis_2vars(diabetes, "BMI", "MentHlth")
 }
 }

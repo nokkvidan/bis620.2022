@@ -7,20 +7,36 @@
 glm_model(y, train, test = NULL, optimize = NA)
 }
 \arguments{
-\item{y}{response variable}
+\item{y}{character response variable}
 
-\item{train}{training data}
+\item{train}{training data that includes y}
 
-\item{test}{testing data}
+\item{test}{test data that has the same column names as the training data, it
+is an optional parameter with NULL default and triggers evaluation otherwise}
 
-\item{optimize}{how to optimize the glm}
+\item{optimize}{how to optimize the glm with default NA, meaning the function
+does not run with optimization. The other options are "manual" and "stepAIC".
+If manual is selected, the model will remove variables with less than 0.1
+significance, rerun the model, and then remove variables with less than 0.05
+significance for the final model. If stepAIC is selected, then the model will
+use the MASS::stepAIC function to check which coefficients are significant,
+remove them, rerun the glm for the final model}
+}
+\value{
+if test is NULL, then the function returns a glm object. If the user
+inputs a test, then the function outputs a list of size 7. The first item is
+a glm object, the second is a list of the training and testing prediction,
+the third is a calibration plot for the training data, the fourth is a
+calibration plot for the validation data, the fifth is a data frame with the
+train and test MSE and the train and test RMSE, the sixth is a confusion
+matrix, the seventh is a pROC opject for the test ROC
 }
 \description{
-glm_model
+Fits a GLM to the input data and returns the model object
 }
 \examples{
 \dontrun{
-glm_model(df, optimize = "manual")
-glm_model(train, test, y, "stepAIC", evaluate = TRUE)
+data(diabetes)
+glm_fit <- glm_model("Diabetes_binary", diabetes, optimize = 'manual')
 }
 }

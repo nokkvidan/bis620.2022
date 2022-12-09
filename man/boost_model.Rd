@@ -7,19 +7,27 @@
 boost_model(y, train, test = NULL)
 }
 \arguments{
-\item{y}{response variable}
+\item{y}{character response variable}
 
-\item{train}{training data}
+\item{train}{training data that includes y}
 
-\item{test}{test data}
+\item{test}{test data that has the same column names as the training data, it
+is an optional parameter with NULL default and triggers evaluation otherwise}
+}
+\value{
+if test is NULL, it returns a xgb.Booster object, if a test object is
+added then a list of 6 objects. The first is a xgb.Booster object, the second
+is a confusion matrix, the third is an importance matrix, the fourth is a
+PRROC object for the ROC curve, the fifth is a PRROC object for a precision-
+recall curve, the sixth is an roc object for the roc results
 }
 \description{
-boost_model
+Fits an XGBoost model to the input data and returns the model
+object
 }
 \examples{
 \dontrun{
-xg.model <- boost_model(y, train, test)
-plot(xg.model[[5]], main="Out-Of-sample PR curve")
-xgb.plot.importance(xg.model[[3]][1:20,])
+data(diabetes)
+xg_fit <- boost_model("Diabetes_binary", diabetes)
 }
 }

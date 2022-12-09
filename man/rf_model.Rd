@@ -7,19 +7,34 @@
 rf_model(y, train, test = NULL, optimize = FALSE)
 }
 \arguments{
-\item{y}{response variable}
+\item{y}{character response variable}
 
-\item{train}{training data}
+\item{train}{training data that includes y}
 
-\item{test}{test data}
+\item{test}{test data that has the same column names as the training data, it
+is an optional parameter with NULL default and triggers evaluation otherwise}
 
-\item{optimize}{how to optimize the model}
+\item{optimize}{a boolean to optimize the model with default FALSE. If the
+parameter is set to TRUE, then the function uses randomForest::tuneRF to find
+the best mtry and then runs the random forest using that value, otherwise it
+runs the random forest without the default mtry.}
+}
+\value{
+If there is no test data, then the function returns a randomForest
+object. If there is test data, then the function returns a list with 7 items.
+The first is a randomForst object, the second is a list of the training and
+testing prediction the third is a calibration plot for the training data, the
+fourth is a calibration plot for the validation data, the fifth is a data
+frame with the train and test MSE and the train and test RMSE, the sixth is a
+confusion matrix, the seventh is a pROC opject for the test ROC
 }
 \description{
-rf_model
+Fits a random forest model to the input data and returns the
+model object
 }
 \examples{
 \dontrun{
-rf_model("Diabetes_binary", train, test, "stepAIC")
+data(diabetes)
+rf_fit <- rf_model("Diabetes_binary", diabetes, optimize = TRUE)
 }
 }
