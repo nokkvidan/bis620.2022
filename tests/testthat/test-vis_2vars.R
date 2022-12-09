@@ -1,9 +1,24 @@
 
-################################################################################
-############################## ggplot Inheritance ##############################
+# Test Inputs
+test_that(
+  "Test for vis_2vars(): x is a variable in the train data",
+  {
+    data(diabetes)
+    expect_error(vis_2vars(diabetes, "Diabetes", "BMI"))
+  }
+)
 
 test_that(
-  "The vis_2vars() returns a ggplot object for: factor v cont",
+  "Test for vis_2vars(): y is a variable in the train data",
+  {
+    data(diabetes)
+    expect_error(vis_2vars(diabetes, "Diabetes_binary", "BMX"))
+  }
+)
+
+# Test Outputs
+test_that(
+  "Test for vis_2vars(): check a ggplot return for factor v cont",
   {
     data(diabetes)
     p <- vis_2vars(diabetes, "Diabetes_binary", "BMI")
@@ -12,7 +27,7 @@ test_that(
 )
 
 test_that(
-  "The vis_2vars() returns a ggplot object for: cont v factor",
+  "Test for vis_2vars(): check a ggplot return for cont v factor",
   {
     data(diabetes)
     p <- vis_2vars(diabetes, "BMI", "Diabetes_binary")
@@ -21,7 +36,7 @@ test_that(
 )
 
 test_that(
-  "The vis_2vars() returns a ggplot object for: factor v factor",
+  "Test for vis_2vars(): check a ggplot return for factor v factor",
   {
     data(diabetes)
     p <- vis_2vars(diabetes, "Diabetes_binary", "Smoker")
@@ -31,7 +46,7 @@ test_that(
 
 
 test_that(
-  "The vis_2vars() returns a ggplot object for: cont v cont",
+  "Test for vis_2vars(): check a ggplot return for cont v cont",
   {
     data(diabetes)
     p <- vis_2vars(diabetes, "BMI", "MentHlth")
