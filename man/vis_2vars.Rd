@@ -4,14 +4,14 @@
 \alias{vis_2vars}
 \title{vis_2vars}
 \usage{
-vis_2vars(d, y, x)
+vis_2vars(d, x, y)
 }
 \arguments{
 \item{d}{diabetes data frame}
 
-\item{y}{an arbitrary variable in diabetes data frame}
-
 \item{x}{an arbitrary variable in diabetes data frame}
+
+\item{y}{an arbitrary variable in diabetes data frame}
 }
 \description{
 vis_2vars

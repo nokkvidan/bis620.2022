@@ -14,6 +14,17 @@
 #' }
 #' @export
 boost_model <- function(y, train, test = NULL) {
+  # Check parameters
+  if (y %!in% colnames(train)) {
+    stop(paste0(y, " is not a variable in your train data"))
+  }
+  if (!is.null(test)){
+    cols <- length(setdiff(colnames(train), colnames(test)))
+    if(cols != 0){
+      stop("The column titles of your train and test sets do not match")
+    }
+  }
+  # Begin the function
   x_train <- data.matrix(train[, !colnames(train) %in% y])
   y_train <- data.matrix(as.numeric(train[, colnames(train) %in% y]))
   # convert the train and test data into xgboost matrix type.

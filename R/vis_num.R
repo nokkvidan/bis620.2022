@@ -9,10 +9,16 @@
 #' }
 #' @export
 vis_num <- function(d) {
+  # Preprocess the data
   bin <- apply(d, 2, function(x) length(unique(x)) == 2)
   d[, bin] <- sapply(d[, bin], as.logical)
   # Creating the two dfs to be plotted
   d_num <- d[, sapply(d, is.numeric)]
+  # Check parameters
+  if (ncol(d_num) == 0) {
+    stop("Please input data with numeric columns")
+  }
+  # Begin the function
   d_num_scaled <- data.frame(
     apply(d_num, 2, function(x) (x - min(x)) / (max(x) - min(x))))
   # Creating the plots

@@ -10,6 +10,11 @@ vis_dist <- function(d) {
   bin <- apply(d, 2, function(x) length(unique(x)) == 2)
   d[, bin] <- sapply(d[, bin], as.logical)
   df_num <- d[, sapply(d, is.numeric)]
+  # Check parameters
+  if (ncol(d_num) == 0) {
+    stop("Please input data with numeric columns")
+  }
+  # Begin the function
   par(mfrow = c(2, 2))
   # Plotting for loop
   for (i in seq_len(ncol(df_num))) {
