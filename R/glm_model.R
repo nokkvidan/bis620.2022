@@ -50,7 +50,7 @@ glm_model <- function(y, train, test = NULL, optimize = NA) {
   ## Begin the function
   # Create the glm formula and run it
   form <- as.formula(paste0(y, "~", "."))
-  fit <- glm(form, data = train)
+  fit <- glm(form, data = train, family = binomial)
   # Save the summary for optimization use
   sum <- summary(fit)
   # If there is no optimization, then the glm fit is the final one
@@ -64,7 +64,7 @@ glm_model <- function(y, train, test = NULL, optimize = NA) {
     # Then re run the model on significant variables only
     form1 <- as.formula(paste("Diabetes_binary", "~",
                               paste(sigvars, collapse = "+")))
-    fit1 <- glm(form1, data = train)
+    fit1 <- glm(form1, data = train, family = binomial)
     # Save this new model's summary and then rerun with 0.05 significance
     sum1 <- summary(fit1)
     sig1 <- which(sum1$coef[, 4] < 0.05)[-1]
@@ -72,7 +72,7 @@ glm_model <- function(y, train, test = NULL, optimize = NA) {
     form2 <- as.formula(paste("Diabetes_binary", "~",
                               paste(sigvars1, collapse = "+")))
     # This is now the final model
-    final_fit <- glm(form2, data = train)
+    final_fit <- glm(form2, data = train, family = binomial)
   } else if (optimize == "stepAIC") {
     # For stepAIC optimization, then fit the stepAIC algorithm to remove coeffs
     step <- MASS::stepAIC(fit)
@@ -80,7 +80,7 @@ glm_model <- function(y, train, test = NULL, optimize = NA) {
     # Rerun the glm
     form2 <- as.formula(paste("Diabetes_binary", "~",
                               paste(sigvars, collapse = "+")))
-    final_fit <- glm(form2, data = train)
+    final_fit <- glm(form2, data = train, family = binomial)
   }
   # If testing data is provided:
   if (!is.null(test)) {
