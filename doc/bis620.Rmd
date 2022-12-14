@@ -14,12 +14,15 @@ knitr::opts_chunk$set(
 )
 ```
 
+
+
 ```{r setup}
 library(bis620.2022)
 library(randomForest)
 
 # Load the data
-data(diabetes)
+setwd("~/bis620.2022/")
+load(file="~/bis620.2022/data/diabetes.rda")
 
 # Splitting the dataset for train and test
 set.seed(1)
@@ -122,7 +125,39 @@ glm_fit <- glm_model("Diabetes_binary", diabetes[, -c(4,13)], optimize = "manual
 ```
 
 ```{r}
+library(dplyr)
+
+# change all variables to categorical, except for Age and BMI
+train <- train %>%
+  mutate_all(as.factor) %>%
+  mutate_at(c("Age", "BMI"), as.numeric)
+
+test <- test %>%
+  mutate_all(as.factor) %>%
+  mutate_at(c("Age", "BMI"), as.numeric)
+```
+
+```{r}
+glm_fit <- glm_model("Diabetes_binary", train = train[-c(4, 13)], test = test[-c(4, 13)], optimize = "manual")
 summary(glm_fit)
+y <- "Diabetes_binary"
+form <- as.formula(paste0(y, "~", "."))
+fit <- glm(form, data = train, family = binomial)
+```
+
+```{r}
+split_string <- function(string) {
+  firstNumber <- sub(".*?(\\d).*", "\\1", string)
+  if (nchar(firstNumber) > 1) {
+    # no number in string
+    return( string )
+  }
+  
+  indexOfFirstNumber <- unlist(gregexpr(firstNumber, string))
+  prefix <- substring(string, 1, indexOfFirstNumber - 1)
+  suffix <- substring(string, indexOfFirstNumber)
+  return( paste0("I(", prefix, "==", suffix, ")") )
+}
 ```
 
 The following plots show the three variables with the largest coefficients as well as BMI. The plot makes it clear that those with diabetes have a larger proportion of people with high blood pressure and high cholesterol than those without diabetes. Additionally, there are more men with diabetes than without and less women with diabetes than without. Their differences; however, are not very large and so it makes sense that the coefficient for sex in our logistic regression is not very large. 
