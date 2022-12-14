@@ -91,16 +91,19 @@ glm_model <- function(y, train, test = NULL, optimize = NA) {
     # Set up training results
     train_pred <- predict(final_fit, type = "response")
     train_pred_b <- ifelse(train_pred > 0.5, 1, 0)
-    ev_train <- data.frame(y = train[, y],
-                           pred = train_pred,
-                           pred.b = train_pred_b)
+    # ev_train <- data.frame(y = train[, y],
+    #                        pred = train_pred,
+    #                        pred.b = train_pred_b)
+    ev_train <- as.data.frame(cbind(y = train[, y],
+                      pred = train_pred,
+                      pred.b = train_pred_b))
     # Set up test results
     test_pred <- predict(final_fit, test, type = "response")
     test_pred_b <- ifelse(test_pred > 0.5, 1, 0)
-    ev_test <- data.frame(y = test[, y],
+    ev_test <- as.data.frame(cbind(y = test[, y],
                           pred = test_pred,
-                          pred.b = test_pred_b)
-    # Train and test predictions
+                          pred.b = test_pred_b))
+    # Trait and test predictions
     results <- list(ev_train, ev_test)
     # Calibration plots
     p1 <- predtools::calibration_plot(data = ev_train, obs = "y", pred = "pred",
@@ -116,8 +119,10 @@ glm_model <- function(y, train, test = NULL, optimize = NA) {
                              RMSE = c(rmse_train, rmse_test)), 3)
     row.names(mses) <- c("Training", "Validation")
     # Cross table and confusion matrix
-    cross_table <- table(predicted = as.factor(ev_test$pred.b),
-                         actual = as.factor(ev_test$y))
+    # as.logical(ev_test$y) changes everything to the same value,
+    # so use ifelse() as workaround
+    cross_table <- table(predicted = as.logical(ev_test$pred.b),
+                         actual = ifelse(ev_test$y==1,TRUE,FALSE))
     confmat <- caret::confusionMatrix(cross_table, positive = "1")
     # ROC
     test_roc <- pROC::roc(ev_test$y ~ ev_test$pred, plot = TRUE,
