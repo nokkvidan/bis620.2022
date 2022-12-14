@@ -140,9 +140,6 @@ test <- test %>%
 ```{r}
 glm_fit <- glm_model("Diabetes_binary", train = train[-c(4, 13)], test = test[-c(4, 13)], optimize = "manual")
 summary(glm_fit)
-y <- "Diabetes_binary"
-form <- as.formula(paste0(y, "~", "."))
-fit <- glm(form, data = train, family = binomial)
 ```
 
 ```{r}
