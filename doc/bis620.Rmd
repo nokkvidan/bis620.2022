@@ -135,9 +135,7 @@ train <- train %>%
 test <- test %>%
   mutate_all(as.factor) %>%
   mutate_at(c("Age", "BMI"), as.numeric)
-```
 
-```{r}
 glm_fit <- glm_model("Diabetes_binary", train = train[-c(4, 13)], test = test[-c(4, 13)], optimize = "manual")
 summary(glm_fit)
 ```

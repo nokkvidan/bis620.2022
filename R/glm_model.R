@@ -123,7 +123,7 @@ glm_model <- function(y, train, test = NULL, optimize = NA) {
     # so use ifelse() as workaround
     cross_table <- table(predicted = as.logical(ev_test$pred.b),
                          actual = ifelse(ev_test$y==1,TRUE,FALSE))
-    confmat <- caret::confusionMatrix(cross_table, positive = TRUE)
+    confmat <- caret::confusionMatrix(cross_table, positive = "TRUE")
     # ROC
     test_roc <- pROC::roc(ev_test$y ~ ev_test$pred, plot = TRUE,
                           print.auc = TRUE)
