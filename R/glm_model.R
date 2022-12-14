@@ -64,8 +64,6 @@ glm_model <- function(y, train, test = NULL, optimize = NA) {
     sig <- which(sum$coef[, 4] < 0.1)[-1]
     sigvars <- rownames(sum$coefficients)[sig]
     # Then re run the model on significant variables only
-    # form1 <- as.formula(paste("Diabetes_binary", "~",
-    #                           paste(sigvars, collapse = "+")))
     form1 <- as.formula(paste(y, "~",
                               paste(sapply(sigvars, split_string), collapse="+")))
     print(form1)
@@ -74,9 +72,8 @@ glm_model <- function(y, train, test = NULL, optimize = NA) {
     sum1 <- summary(fit1)
     sig1 <- which(sum1$coef[, 4] < 0.05)[-1]
     sigvars1 <- rownames(sum1$coefficients)[sig1]
-    # form2 <- as.formula(paste("Diabetes_binary", "~",
-    #                           paste(sigvars1, collapse = "+")))
-    form2 <- as.formula(paste(y, "~", paste(sigvars1, collapse = "+")))
+    form2 <- as.formula(paste(y, "~",
+                              paste(sapply(sigvars1, split_string), collapse="+")))
     # This is now the final model
     final_fit <- glm(form2, data = train, family = binomial)
   } else if (optimize == "stepAIC") {
@@ -84,7 +81,9 @@ glm_model <- function(y, train, test = NULL, optimize = NA) {
     step <- MASS::stepAIC(fit)
     sigvars <- names(step$coefficients[-1])
     # Rerun the glm
-    form2 <- as.formula(paste(y, "~", paste(sigvars, collapse = "+")))
+    # form2 <- as.formula(paste(y, "~", paste(sigvars, collapse = "+")))
+    form2 <- as.formula(paste(y, "~",
+                              paste(sapply(sigvars1, split_string), collapse="+")))
     final_fit <- glm(form2, data = train, family = binomial)
   }
   # If testing data is provided:
