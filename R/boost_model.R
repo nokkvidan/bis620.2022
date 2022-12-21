@@ -36,7 +36,7 @@ boost_model <- function(y, train, test = NULL) {
   }
   ## Begin the function
   form <- as.formula(paste0(y, " ~ ."))
-  sparse_train <- sparse.model.matrix(form, data = train)[,-1]
+  sparse_train <- Matrix::sparse.model.matrix(form, data = train)[,-1]
   output_vector = train[,y] == 1
   model <- xgboost::xgboost(data = sparse_train, label = output_vector,
                             max_depth = 15, eta = 1, nthread = 2, nrounds = 30,
@@ -45,7 +45,7 @@ boost_model <- function(y, train, test = NULL) {
   # Train a model using our training data
   # model <- xgboost::xgboost(data = boost_train, max.depth = 15, nrounds = 30)
   if (!is.null(test)) {
-    sparse_test <- sparse.model.matrix(form, data = test)[,-1]
+    sparse_test <- Matrix::sparse.model.matrix(form, data = test)[,-1]
     pred_test <- predict(model, sparse_test)
     pred_test_b <- as.logical(ifelse(pred_test > 0.5, 1, 0))
     y_test <- test[,y]
