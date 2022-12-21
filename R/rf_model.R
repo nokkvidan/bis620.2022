@@ -50,6 +50,7 @@ rf_model <- function(y, train, test = NULL, optimize = FALSE) {
   # Create the formula with the training data
   train[, y] <- as.factor(as.character(train[, y]))
   form <- as.formula(paste0(y, "~ ."))
+  print(form)
   # If optimize is TRUE, then:
   if (optimize ==  TRUE) {
     # Tune the random forest and find the optimal mtry value
@@ -68,6 +69,7 @@ rf_model <- function(y, train, test = NULL, optimize = FALSE) {
                                      ntree = 100, norm.votes = FALSE,
                                      do.trace = 10, importance = TRUE)
   }
+  print("rf done training")
   # If testing data is provided:
   if (!is.null(test)) {
     # Use the generated random forest and run it on both the train and test data
@@ -92,6 +94,8 @@ rf_model <- function(y, train, test = NULL, optimize = FALSE) {
     p2 <- predtools::calibration_plot(
       data = ev_test, obs = "y", pred = "pred",
       title = "Calibration plot for validation data")
+
+    print("rf test")
     # MSE and RMSE for both training and testing predictions and make data frame
     mse_train <- Metrics::mse(actual = ev_train$y, predicted = ev_train$pred)
     rmse_train <- Metrics::rmse(actual = ev_train$y, predicted = ev_train$pred)

@@ -91,18 +91,15 @@ glm_model <- function(y, train, test = NULL, optimize = NA) {
     # Set up training results
     train_pred <- predict(final_fit, type = "response")
     train_pred_b <- ifelse(train_pred > 0.5, 1, 0)
-    # ev_train <- data.frame(y = train[, y],
-    #                        pred = train_pred,
-    #                        pred.b = train_pred_b)
     ev_train <- as.data.frame(cbind(y = train[, y],
-                      pred = train_pred,
-                      pred.b = train_pred_b))
+                                    pred = train_pred,
+                                    pred.b = train_pred_b))
     # Set up test results
     test_pred <- predict(final_fit, test, type = "response")
     test_pred_b <- ifelse(test_pred > 0.5, 1, 0)
     ev_test <- as.data.frame(cbind(y = test[, y],
-                          pred = test_pred,
-                          pred.b = test_pred_b))
+                                   pred = test_pred,
+                                   pred.b = test_pred_b))
     # Trait and test predictions
     results <- list(ev_train, ev_test)
     # Calibration plots
