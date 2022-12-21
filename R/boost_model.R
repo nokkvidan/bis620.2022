@@ -12,6 +12,7 @@
 #' recall curve, the sixth is an roc object for the roc results
 #' @importFrom xgboost xgb.DMatrix xgboost xgb.importance
 #' @importFrom caret confusionMatrix
+#' @importFrom Matrix sparse.model.matrix
 #' @importFrom pROC roc
 #' @importFrom PRROC pr.curve roc.curve
 #' @importFrom stats predict
