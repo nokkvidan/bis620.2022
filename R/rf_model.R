@@ -34,6 +34,7 @@ rf_model <- function(y, train, test = NULL, optimize = FALSE) {
   if (y %nin% colnames(train)) {
     stop(paste0(y, " is not a variable in your train data"))
   }
+  
   # If there is test data, check that their columns match
   if (!is.null(test)) {
     diff1 <- names(train) %nin% names(test)
@@ -50,7 +51,6 @@ rf_model <- function(y, train, test = NULL, optimize = FALSE) {
   # Create the formula with the training data
   train[, y] <- as.factor(as.character(train[, y]))
   form <- as.formula(paste0(y, "~ ."))
-  print(form)
   # If optimize is TRUE, then:
   if (optimize ==  TRUE) {
     # Tune the random forest and find the optimal mtry value
@@ -69,7 +69,6 @@ rf_model <- function(y, train, test = NULL, optimize = FALSE) {
                                      ntree = 100, norm.votes = FALSE,
                                      do.trace = 10, importance = TRUE)
   }
-  print("rf done training")
   # If testing data is provided:
   if (!is.null(test)) {
     # Use the generated random forest and run it on both the train and test data
@@ -95,7 +94,6 @@ rf_model <- function(y, train, test = NULL, optimize = FALSE) {
       data = ev_test, obs = "y", pred = "pred",
       title = "Calibration plot for validation data")
 
-    print("rf test")
     # MSE and RMSE for both training and testing predictions and make data frame
     mse_train <- Metrics::mse(actual = ev_train$y, predicted = ev_train$pred)
     rmse_train <- Metrics::rmse(actual = ev_train$y, predicted = ev_train$pred)
@@ -106,7 +104,7 @@ rf_model <- function(y, train, test = NULL, optimize = FALSE) {
     row.names(mses) <- c("Training", "Validation")
     # Create cross table and confusion matrix and add to a list
     cross_table <- table(predicted = as.logical(ev_test$pred.b),
-                         actual = as.logical(ev_test$y))
+                         actual = ifelse(ev_test$y==1,TRUE,FALSE))
     confmat <- caret::confusionMatrix(cross_table, positive = "TRUE")
     # ROC for test data
     test_roc <- pROC::roc(ev_test$y ~ ev_test$pred, plot = TRUE,
