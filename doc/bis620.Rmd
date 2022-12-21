@@ -40,7 +40,7 @@ test <- test %>%
   mutate_at(c("Age", "BMI"), as.numeric)
 
 detach(package:bis620.2022, unload=TRUE)
-devtools::install_github("nokkvidan/bis620.2022@forest", force=TRUE)
+devtools::install_github("nokkvidan/bis620.2022@boost", force=TRUE)
 library(bis620.2022)
 ```
 

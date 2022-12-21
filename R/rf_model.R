@@ -54,8 +54,8 @@ rf_model <- function(y, train, test = NULL, optimize = FALSE) {
   # If optimize is TRUE, then:
   if (optimize ==  TRUE) {
     # Tune the random forest and find the optimal mtry value
-    mtry <- randomForest::tuneRF(train[, !colnames(train) %in% y],
-                                 train[, colnames(train) %in% y],
+    mtry <- randomForest::tuneRF(x = train[, !colnames(train) %in% y],
+                                 y = train[, colnames(train) %in% y],
                                  ntreeTry = 100, stepFactor = 1.5,
                                  improve = 0.01, trace = TRUE, plot = TRUE)
     best_m <- mtry[mtry[, 2] == min(mtry[, 2]), 1]
@@ -75,8 +75,8 @@ rf_model <- function(y, train, test = NULL, optimize = FALSE) {
     # to get predictions
     pred_train <- predict(rf, type = "prob")
     pred_test <- predict(rf, newdata = test, type = "prob")
-    train_pred_b <- as.factor(ifelse(pred_train[, 1] < 0.5, TRUE, FALSE))
-    test_pred_b <- as.factor(ifelse(pred_test[, 1] < 0.5, TRUE, FALSE))
+    train_pred_b <- as.factor(ifelse(pred_train[, 1] > 0.5, TRUE, FALSE))
+    test_pred_b <- as.factor(ifelse(pred_test[, 1] > 0.5, TRUE, FALSE))
     # Create a data frame of the training and the testing evaluation
     ev_train <- data.frame(y = as.numeric(as.logical(train[, y])),
                            pred = as.numeric(pred_train[, 2]),
