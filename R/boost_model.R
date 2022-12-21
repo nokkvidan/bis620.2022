@@ -35,26 +35,26 @@ boost_model <- function(y, train, test = NULL) {
     }
   }
   ## Begin the function
-  # Split the train data into dependent and independent variables
-  x_train <- data.matrix(train[, !colnames(train) %in% y])
-  y_train <- data.matrix(as.numeric(train[, colnames(train) %in% y]))
-  # Convert the train and test data into xgboost matrix type.
-  boost_train <- xgboost::xgb.DMatrix(data = x_train, label = y_train)
+  form <- as.formula(paste0(y, " ~ ."))
+  sparse_train <- sparse.model.matrix(form, data = train)[,-1]
+  output_vector = train[,y] == 1
+  model <- xgboost::xgboost(data = sparse_train, label = output_vector,
+                            max_depth = 15, eta = 1, nthread = 2, nrounds = 30,
+                            objective = "binary:logistic")
+  
   # Train a model using our training data
-  model <- xgboost::xgboost(data = boost_train, max.depth = 15, nrounds = 30)
+  # model <- xgboost::xgboost(data = boost_train, max.depth = 15, nrounds = 30)
   if (!is.null(test)) {
-    # Convert the train and test data into xgboost matrix type.
-    x_test <- data.matrix(test[, !colnames(test) %in% y])
-    y_test <- data.matrix(as.numeric(test[, colnames(test) %in% y]))
-    boost_test <- xgboost::xgb.DMatrix(data = x_test, label = y_test)
-    # Use model to make predictions on test data and create confusion matrix
-    pred_test <- predict(model, boost_test)
-    pred_test_b <- as.factor(ifelse(pred_test > 0.5, 1, 0))
-    y_test <- factor(y_test)
-    pred_test <- as.numeric(pred_test)
-    conf_mat <- caret::confusionMatrix(y_test, pred_test_b)
+    sparse_test <- sparse.model.matrix(form, data = test)[,-1]
+    pred_test <- predict(model, sparse_test)
+    pred_test_b <- as.logical(ifelse(pred_test > 0.5, 1, 0))
+    y_test <- test[,y]
+    y_test_b <- ifelse(y_test==1,TRUE,FALSE)
+    cross_table <- table(predicted = pred_test_b, actual = y_test_b)
+    confmat <- caret::confusionMatrix(cross_table, positive = "TRUE")
+    
     # Compute feature importance matrix
-    importance_matrix <- xgboost::xgb.importance(colnames(boost_train),
+    importance_matrix <- xgboost::xgb.importance(colnames(sparse_train),
                                                  model = model)
     # ROC and PRAUC
     score1 <- pred_test[y_test == 1]
@@ -65,7 +65,7 @@ boost_model <- function(y, train, test = NULL) {
     roc_test <- pROC::roc(y_test, pred_test, algorithm = 2, plot = TRUE,
                           print.auc = TRUE)
     # Combine them together in a list to a return variable
-    ret <- list(model, conf_mat, importance_matrix, roc, pr, roc_test)
+    ret <- list(model, confmat, importance_matrix, roc, pr, roc_test)
   } else {
     # If no test data, then just assign the model to the return variable
     ret <- model
