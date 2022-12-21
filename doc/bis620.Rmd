@@ -10,18 +10,18 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#"
+  comment = "#",
+  root.dir = "~/bis620.2022/"
 )
 ```
-
-
 
 ```{r setup}
 library(bis620.2022)
 library(randomForest)
+library(dplyr)
 
 # Load the data
-setwd("~/bis620.2022/")
+# devtools::install_github("nokkvidan/bis620.2022")
 load(file="~/bis620.2022/data/diabetes.rda")
 
 # Splitting the dataset for train and test
@@ -29,6 +29,21 @@ set.seed(1)
 sample <- sample(c(1, 2), nrow(diabetes), replace = TRUE, prob = c(.8, .2))
 train <- diabetes[sample == 1, ]
 test <- diabetes[sample == 2, ]
+
+# change all variables to categorical, except for Age and BMI
+train <- train %>%
+  mutate_all(as.factor) %>%
+  mutate_at(c("Age", "BMI"), as.numeric)
+
+test <- test %>%
+  mutate_all(as.factor) %>%
+  mutate_at(c("Age", "BMI"), as.numeric)
+```
+
+
+```{r}
+# class(train$Diabetes_binary[1])
+head(train)
 ```
 
 # Motivations
@@ -46,7 +61,9 @@ To accomplish this goal, we developed this diabetes risk prediction R package wh
 The data set `diabetes` has been attached to the package and is available to use as demonstrated with the examples below.
 
 # About the package functions
+
 ## EDA functions
+
 The diabetes risk prediction R project also includes a suite of visualization functions that allow for the exploratory analysis of the data set used to train the prediction model. These functions provide an interactive and intuitive way to explore the relationship between different variables and the likelihood of a patient having diabetes.
 
 #### Visualize interactions (2 variables)
@@ -112,11 +129,11 @@ rf_fit <- rf_model("Diabetes_binary", train, test, optimize = TRUE)
 xg_fit <- boost_model("Diabetes_binary", train, test)
 ```
 
-
 # Modeling analysis
+
 ## Logistic regression
-According to the optimized logistic regression, the factors that contribute to the probability of having diabetes are high blood pressure(0.75), high cholesterol (0.6), and general health (0.59). 
-BMI's coefficient, 0.08, is not as strong as would have been expected, but the distribution between the two is fairly similar. Another surprising figure is the coefficient for heavy alcohol consumption, -0.75. This coefficient is negative which means that patients who heavily consume alcohol are less likely to have been diagnosed with diabetes/pre-diabetes. A possible explanation for this could be that the variable is linked to sex and future upgrades to this package could include the option to add interaction variables.
+
+According to the optimized logistic regression, the factors that contribute to the probability of having diabetes are high blood pressure(0.75), high cholesterol (0.6), and general health (0.59). BMI's coefficient, 0.08, is not as strong as would have been expected, but the distribution between the two is fairly similar. Another surprising figure is the coefficient for heavy alcohol consumption, -0.75. This coefficient is negative which means that patients who heavily consume alcohol are less likely to have been diagnosed with diabetes/pre-diabetes. A possible explanation for this could be that the variable is linked to sex and future upgrades to this package could include the option to add interaction variables.
 
 The rest of the coefficient signs are fairly expected. The indicators for high blood pressure, high cholesterol, larger BMI, strokes, heart disease/attacks, and general health (larger value = worse health) contribute to diabetes. At the same time, eating veggies, having strong physical health, more income, and more education have negative coefficients contributing to decreasing in the likelihood of having diabetes. An increase in number of days with mental health concerns does have a negative coefficient, -0.005, and there is not a clear reason for why this might be the case.
 
@@ -125,17 +142,6 @@ glm_fit <- glm_model("Diabetes_binary", diabetes[, -c(4,13)], optimize = "manual
 ```
 
 ```{r}
-library(dplyr)
-
-# change all variables to categorical, except for Age and BMI
-train <- train %>%
-  mutate_all(as.factor) %>%
-  mutate_at(c("Age", "BMI"), as.numeric)
-
-test <- test %>%
-  mutate_all(as.factor) %>%
-  mutate_at(c("Age", "BMI"), as.numeric)
-
 glm_fit <- glm_model("Diabetes_binary", train = train[-c(4, 13)], test = test[-c(4, 13)], optimize = "manual")
 summary(glm_fit)
 ```
@@ -147,7 +153,6 @@ split_string <- function(string) {
     # no number in string
     return( string )
   }
-  
   indexOfFirstNumber <- unlist(gregexpr(firstNumber, string))
   prefix <- substring(string, 1, indexOfFirstNumber - 1)
   suffix <- substring(string, indexOfFirstNumber)
@@ -156,7 +161,6 @@ split_string <- function(string) {
 ```
 
 The following plots show the three variables with the largest coefficients as well as BMI. The plot makes it clear that those with diabetes have a larger proportion of people with high blood pressure and high cholesterol than those without diabetes. Additionally, there are more men with diabetes than without and less women with diabetes than without. Their differences; however, are not very large and so it makes sense that the coefficient for sex in our logistic regression is not very large. 
-
 
 ```{r, fig.width=7, fig.height=7}
 p1 <- vis_2vars(diabetes, "Diabetes_binary", "HighBP")
@@ -167,6 +171,7 @@ gridExtra::grid.arrange(p1, p2, p3, p4)
 ```
 
 ## Random Forest
+
 We ran the random forest model on the full data and chosen to optimize the model which means that we optimized the model to have the best mtry value. In other words, we chose the best tree split based on a random sample of an mtry number of predictors. Here that number is optimized to be 2 and the number of trees is 100. The error rate is 25.48% which means that it has 74.52% accuracy. For this model, we split the data into train and test and evaluated its performance. The accuracy for the test data was similar to that of the model, 74.67%, which is not high for either case and the confidence interval is from 73.94% to 75.38%
 
 ```{r, results = "hide", fig.show = "hide", message = FALSE, warning = FALSE}
@@ -209,7 +214,4 @@ print(xg_fit[[3]])
 
 In conclusion, variables like to doctor's cost, fruits and veggies aren't indicators that are as important as BMI, general health, blood pressure, and cholesterol across models when predicting for diabetes. Also, variables like strokes and heart disease/attacks flip between the most and the least important depending on the model.
 
-
 # Counter Factuals
-
-
