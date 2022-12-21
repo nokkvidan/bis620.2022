@@ -10,14 +10,13 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#",
-  root.dir = "~/bis620.2022/"
+  comment = "#"
+  # root.dir = "~/bis620.2022/"
 )
 ```
 
 ```{r setup}
 library(bis620.2022)
-library(randomForest)
 library(dplyr)
 
 # Load the data
@@ -27,21 +26,17 @@ load(file="~/bis620.2022/data/diabetes.rda")
 # Splitting the dataset for train and test
 set.seed(1)
 sample <- sample(c(1, 2), nrow(diabetes), replace = TRUE, prob = c(.8, .2))
-train <- diabetes[sample == 1, ]
-test <- diabetes[sample == 2, ]
-
-# change all variables to categorical, except for Age and BMI
-train <- train %>%
+# convert all variables to categorical, except for Age and BMI
+train <- diabetes[sample == 1, ] %>%
+  mutate_all(as.factor) %>%
+  mutate_at(c("Age", "BMI"), as.numeric)
+test <- diabetes[sample == 2, ] %>%
   mutate_all(as.factor) %>%
   mutate_at(c("Age", "BMI"), as.numeric)
 
-test <- test %>%
-  mutate_all(as.factor) %>%
-  mutate_at(c("Age", "BMI"), as.numeric)
-
-detach(package:bis620.2022, unload=TRUE)
-devtools::install_github("nokkvidan/bis620.2022", force=TRUE)
-library(bis620.2022)
+# detach(package:bis620.2022, unload=TRUE)
+# devtools::install_github("nokkvidan/bis620.2022", force=TRUE)
+# library(bis620.2022)
 ```
 
 # Motivations
