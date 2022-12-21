@@ -66,7 +66,6 @@ glm_model <- function(y, train, test = NULL, optimize = NA) {
     # Then re run the model on significant variables only
     form1 <- as.formula(paste(y, "~",
                               paste(sapply(sigvars, split_string), collapse="+")))
-                              paste(sigvars, collapse = "+")))
     fit1 <- glm(form1, data = train, family = binomial)
     # Save this new model's summary and then rerun with 0.05 significance
     sum1 <- summary(fit1)
@@ -74,7 +73,6 @@ glm_model <- function(y, train, test = NULL, optimize = NA) {
     sigvars1 <- rownames(sum1$coefficients)[sig1]
     form2 <- as.formula(paste(y, "~",
                               paste(sapply(sigvars1, split_string), collapse="+")))
-                              paste(sigvars1, collapse = "+")))
     # This is now the final model
     final_fit <- glm(form2, data = train, family = binomial)
   } else if (optimize == "stepAIC") {
