@@ -172,10 +172,6 @@ gridExtra::grid.arrange(p1, p2, p3, p4)
 
 We ran the random forest model on the full data and chosen to optimize the model which means that we optimized the model to have the best mtry value. In other words, we chose the best tree split based on a random sample of an mtry number of predictors. Here that number is optimized to be 2 and the number of trees is 100. The error rate is 25.48% which means that it has 74.52% accuracy. For this model, we split the data into train and test and evaluated its performance. The accuracy for the test data was similar to that of the model, 74.67%, which is not high for either case and the confidence interval is from 73.94% to 75.38%
 
-```{r}
-head(train)
-```
-
 ```{r, results = "hide", fig.show = "hide", message = FALSE, warning = FALSE}
 rf_fit <- rf_model("Diabetes_binary", train[, -c(4,13)], test[, -c(4,13)], optimize = TRUE)
 ```
