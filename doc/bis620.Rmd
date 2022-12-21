@@ -144,20 +144,6 @@ glm_fit <- glm_model("Diabetes_binary", train = train[-c(4, 13)], test = test[-c
 summary(glm_fit)
 ```
 
-```{r}
-split_string <- function(string) {
-  firstNumber <- sub(".*?(\\d).*", "\\1", string)
-  if (nchar(firstNumber) > 1) {
-    # no number in string
-    return( string )
-  }
-  indexOfFirstNumber <- unlist(gregexpr(firstNumber, string))
-  prefix <- substring(string, 1, indexOfFirstNumber - 1)
-  suffix <- substring(string, indexOfFirstNumber)
-  return( paste0("I(", prefix, "==", suffix, ")") )
-}
-```
-
 The following plots show the three variables with the largest coefficients as well as BMI. The plot makes it clear that those with diabetes have a larger proportion of people with high blood pressure and high cholesterol than those without diabetes. Additionally, there are more men with diabetes than without and less women with diabetes than without. Their differences; however, are not very large and so it makes sense that the coefficient for sex in our logistic regression is not very large. 
 
 ```{r, fig.width=7, fig.height=7}
