@@ -1,16 +1,16 @@
-#' @description Formats categorical variable name for use in formula() and
-#' as.formula
+#' @description Formats categorical variable names for use in formula() and
+#' as.formula, specifically when R/glm_model() extracts significant variables.
 #' object
-#' @title split_string
+#' @title extract_categorical_name
 #' @param string character name of model variable
 #' @return formatted categorical variable name
 #' @importFrom stringr str_remove
 #' @examples \dontrun{
-#' split_string("CategoricalLevel10")
-#' split_string("CategoricalLevel10TRUE")
+#' extract_categorical_name("Education10")
+#' extract_categorical_name("Education10TRUE")
 #' }
 #' @export
-split_string <- function(string) {
+extract_categorical_name <- function(string) {
   if (endsWith(string, "TRUE") || endsWith(string, "FALSE")) {
     return(stringr::str_remove(string, "TRUE|FALSE"))
   }
