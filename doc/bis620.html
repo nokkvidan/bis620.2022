@@ -342,28 +342,19 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bis620<span class="fl">.2022</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Attaching package: &#39;dplyr&#39;</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># The following objects are masked from &#39;package:stats&#39;:</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">#     filter, lag</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># The following objects are masked from &#39;package:base&#39;:</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">#     intersect, setdiff, setequal, union</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the data</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># devtools::install_github(&quot;nokkvidan/bis620.2022@temp&quot;)</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(diabetes)</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Splitting the dataset for train and test</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>sample <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="fu">nrow</span>(diabetes), <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> <span class="fu">c</span>(.<span class="dv">8</span>, .<span class="dv">2</span>))</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co"># convert all variables to categorical, except for Age and BMI</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> diabetes[sample <span class="sc">==</span> <span class="dv">1</span>, ] <span class="sc">%&gt;%</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(<span class="sc">-</span><span class="fu">c</span>(<span class="st">&quot;Age&quot;</span>, <span class="st">&quot;BMI&quot;</span>)), as.factor)</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> diabetes[sample <span class="sc">==</span> <span class="dv">2</span>, ] <span class="sc">%&gt;%</span></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(<span class="sc">-</span><span class="fu">c</span>(<span class="st">&quot;Age&quot;</span>, <span class="st">&quot;BMI&quot;</span>)), as.factor)</span></code></pre></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the data</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(diabetes)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Splitting the dataset for train and test</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>sample <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="fu">nrow</span>(diabetes), <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> <span class="fu">c</span>(.<span class="dv">8</span>, .<span class="dv">2</span>))</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># convert all variables to categorical, except for Age and BMI</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> diabetes[sample <span class="sc">==</span> <span class="dv">1</span>, ] <span class="sc">%&gt;%</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(<span class="sc">-</span><span class="fu">c</span>(<span class="st">&quot;Age&quot;</span>, <span class="st">&quot;BMI&quot;</span>)), as.factor)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> diabetes[sample <span class="sc">==</span> <span class="dv">2</span>, ] <span class="sc">%&gt;%</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(<span class="sc">-</span><span class="fu">c</span>(<span class="st">&quot;Age&quot;</span>, <span class="st">&quot;BMI&quot;</span>)), as.factor)</span></code></pre></div>
 <div id="motivations" class="section level1">
 <h1>Motivations</h1>
 <p>It is estimated that 1 in 10 people in America have diabetes and 1 in
@@ -815,67 +806,114 @@ and the xgboost model is the most powerful. Future analysis with these
 models will be dependent on the scope and purpose of the analysis.</p>
 </div>
 </div>
-<div id="counter-factuals" class="section level1">
-<h1>Counter Factuals</h1>
-<p>To conduct a counter factual analysis, we first begin with finding a
-set of variables that were marked as significant by each of the models
-(according to their own metrics), or at the least, variables in which
-the majority of models marked them as important. We also constrained our
-selection to actionable indicators so that a patient could take action
-for change or reduce the risk of it occurring. For example, the patient
-could lower the BMI through exercise, but could not change their age. By
-keeping only actionable indicators, the results of this analysis can
-help a doctor give the patient a concrete set of improvements to their
-lives to reduce the likelihood of diabetes.</p>
-<p>We proceeded by initially fitting our model on a subset of the test
-data were patients were diabetic and belonged to the class of our
-specified variable. For example, diabetic patients who had a “high
-cholesterol” value of 1. The actionable and important indicators that
-resulted from these tests were blood pressure, cholesterol, BMI and
-heart disease/attack. All of these, except for BMI, are categorical
-variables.</p>
-<p>Next, we examine the initial prediction for the proportion of
-individuals we predicted to have diabetes in our model. We changed the
-value of the variable (the counter factual), to a healthy value (or
-range in the case of BMI) and noticed the increase/decrease in the
-proportion of individuals being classified as having diabetes.</p>
-<p>In each of the models and for all of our variables, performing a
-counter factual change reduced the proportion of individuals being
-classified as having type 2 diabetes. Changing the BMI had the greatest
-effect in two of our models and the 2nd biggest effect in the other.
-Thus, the best action to take would be to reduce a patients BMI. The
-next best actions are to reduce the blood pressure and cholesterol
-levels, which the doctor could also provide remedies for. It seems that
-the heart disease or attack had consistently the smallest decreases
-amongst all models so should be given least priority amongst them.</p>
-<p>The output of the analysis referenced above is presented in the
-tables below:</p>
-<p>Note: that only variables that the glm considers significant could be
-used for our counterfactual model</p>
+<div id="counterfactual-analysis" class="section level1">
+<h1>Counterfactual Analysis</h1>
+<p>The main purpose of this study is not only to understand which
+features are the most correlated with type 2 diabetes, but to provide a
+medical professional with important context about the <em>extent</em>
+that a certain feature does or does not put a patient at risk of
+diabetes. Therefore, we proceed with a counterfactual analysis on the
+following five features: <code>BMI</code> (patient’s body mass index),
+<code>HeartDiseaseorAttack</code> (1 = patient has heart disease or
+history of heart attacks), <code>HighBP</code> (1 = patient has high
+blood pressure), <code>HighChol</code> (1 = patient has high
+cholesterol), and <code>PhysActivity</code> (0 = patient is not
+physically active). That is, we examine how changing these features from
+unhealthy to healthy levels changes each model’s predicted proportion of
+diabetes (among the diabetic subset of the test data).</p>
+<p>We focus on five these features in particular because patient
+intervention is possible. For example, if the patient <em>does</em> have
+a history of poor heart health, or is <em>not</em> physically active,
+then a doctor would be able to directly mitigate a person’s risk for
+type 2 diabetes by prescribing appropriate dietary and/or exercise
+regimens, respectively. On the other hand, we intentionally exclude
+factors such as <code>GenHlth</code> (general health) and
+<code>Income</code> (financial income), where the former is a feature
+that is measured on a subjective scale, and the latter is a feature over
+which the patient has relatively less agency. Finally, note that for a
+fair counterfactual analysis across all three models, we were restricted
+to variables that were statistically significant according to the glm
+model, otherwise we would not be able to test how different feature
+levels affect risk of diabetes.</p>
+<p>Again, to minimize model bias, the counterfactual analysis is
+conducted on the diabetic subset of the test data, not the training
+data. For each of the five features, we record each model’s predicted
+proportion of diabetes before and after adjusting the features to
+healthy levels. Importantly, this analysis is a highly interpretable
+method for comparing the relative impact that each feature has on a
+patient’s likelihood of diabetes. For BMI, we threshold all patients
+into a range of 15 to 17, which are ubiquitously healthy levels (within
+the 5th to 85th percentile, according to the <a href="https://www.cdc.gov/healthyweight/assessing/bmi/childrens_bmi/about_childrens_bmi.html">CDC</a>)
+for the ages included in this study (13 years old and younger). For the
+other four binary categorical features, we simply adjust each from the
+unhealthy to healthy level.</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># xg boost counterfactual</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">get_counterfactual</span>(<span class="at">model =</span> xg_fit[[<span class="dv">1</span>]], <span class="at">data =</span> test)</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co">#                         Before     After     Change</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># BMI                  0.5097293 0.3391850 -0.1705443</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co"># HeartDiseaseorAttack 0.7897218 0.4604990 -0.3292228</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co"># HighBP               0.7127286 0.2484682 -0.4642604</span></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co"># HighChol             0.6727321 0.3281669 -0.3445652</span></span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="co"># PhysActivity         0.6491607 0.4516677 -0.1974930</span></span></code></pre></div>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co">#                         Before     After       Change</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># BMI                  0.7139825 0.4964619 -0.217520521</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co"># HeartDiseaseorAttack 0.8330264 0.8133824 -0.019643953</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co"># HighBP               0.7912502 0.6539695 -0.137280784</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co"># HighChol             0.7763572 0.6713477 -0.105009432</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="co"># PhysActivity         0.7790520 0.7759939 -0.003058104</span></span></code></pre></div>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># random forest counterfactual</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">get_counterfactual</span>(<span class="at">model =</span> rf_fit[[<span class="dv">1</span>]], <span class="at">data =</span> test)</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co">#                         Before     After        Change</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># BMI                  0.4969332 0.4964749 -4.582628e-04</span></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co"># HeartDiseaseorAttack 0.4981141 0.4967255 -1.388573e-03</span></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="co"># HighBP               0.4968053 0.4970977  2.923985e-04</span></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co"># HighChol             0.4967889 0.4970939  3.050216e-04</span></span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="co"># PhysActivity         0.4968825 0.4969543  7.177003e-05</span></span></code></pre></div>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co">#                         Before     After      Change</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># BMI                  0.7980470 0.6522785 -0.14576847</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co"># HeartDiseaseorAttack 0.9717618 0.9165132 -0.05524862</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="co"># HighBP               0.9113709 0.6948897 -0.21648124</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co"># HighChol             0.8836722 0.7597988 -0.12387340</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="co"># PhysActivity         0.8933486 0.8700306 -0.02331804</span></span></code></pre></div>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># glm counterfactual</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">get_counterfactual</span>(<span class="at">model =</span> glm_fit[[<span class="dv">1</span>]], <span class="at">data =</span> test)</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co">#                         Before     After     Change</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># BMI                  0.5192470 0.2632544 -0.2559927</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co"># HeartDiseaseorAttack 0.8958039 0.4530382 -0.4427657</span></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co"># HighBP               0.7822601 0.1807481 -0.6015119</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co"># HighChol             0.7238427 0.2913562 -0.4324865</span></span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="co"># PhysActivity         0.6880096 0.4489714 -0.2390382</span></span></code></pre></div>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co">#                         Before     After      Change</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># BMI                  0.7677611 0.4201811 -0.34757996</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co"># HeartDiseaseorAttack 0.9361572 0.9103745 -0.02578269</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co"># HighBP               0.8828965 0.6752781 -0.20761833</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co"># HighChol             0.8534898 0.7063509 -0.14713896</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="co"># PhysActivity         0.8486239 0.8486239  0.00000000</span></span></code></pre></div>
+<p>In the three counterfactual tables above, the “Before” and “After”
+columns represent the predicted proportion of diabetes among the
+diabetic subset of the test data before/after adjusting each feature.
+Notice that the proportions in the “Before” column measure how well each
+model correctly detects diabetes, because we are only considering
+individuals with diabetes. In other words, in the “Before” column, the
+ideal model predicts all 1s, so values closer to 0 correspond to higher
+probabilities of false negatives (i.e., type 2 error) for the subset
+corresponding to that row. For example, while the random forest
+counterfactual suggests that decreasing <code>BMI</code> to the CDC
+recommended range of 15-17 decreases the probability of diabetes by
+about 15%, the validity of this result is offset by the relatively
+higher type 2 error (about 20% of the test data with diabetes was
+misclassified as non diabetic). Lastly, note that it makes sense that
+all values in the “Change” column are negative, because we are adjusting
+each feature from unhealthy to healthy levels, so we should expect the
+diabetic proportion to decrease.</p>
+<p>Overall, taking into consideration these type 2 error rates, the
+three models generally agree that adjusting <code>BMI</code> and
+<code>HighBP</code> to healthy levels were the most effective for
+decreasing the probability of diabetes. Furthermore, while
+<code>HeartDiseaseorAttack</code> was ubiquitously the best at
+predicting the presence of diabetes (i.e., had the lowest type 2 error
+rate), changing this factor to the healthy level led to a negligible
+decrease in the probability of diabetes. On the other hand,
+<code>HighBP</code> had comparable type 2 error rates to
+<code>HeartDiseaseorAttack</code> for the three models, <em>and</em>
+adjusting the factor led to comparatively greater decreases in the
+probability of diabetes. Finally, we are very surprised to find that, in
+the logistic (glm) model, there was no change in the probability of
+diabetes after adjusting <code>PhysActivity</code> to a healthy level!
+This is a surprising finding, given that the factor was a statistically
+significant variable in the logistic model.</p>
+<p>Returning to the motivating hypothesis for our study, in which we are
+interested in finding which features are simultaneously practical (in
+the sense that intervention for a patient is possible) <em>and</em>
+highly relevant to detecting a patient’s risk of diabetes, the
+counterfactual analysis shows a strong consensus for blood pressure and
+BMI being useful proxies for a patient’s risk of diabetes. The findings
+from our counterfactual analysis completely recontextualize the previous
+statistical modeling, showing that statistical significance does not
+necessarily translate to real-world significance for patient
+intervention.</p>
 </div>
 
 

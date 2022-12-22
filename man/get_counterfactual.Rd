@@ -33,6 +33,6 @@ physical activity) to \code{PhysActivity == 1}.
 \dontrun{
 data(diabetes)
 rf_fit <- rf_model("Diabetes_binary", diabetes, optimize = TRUE)
-counterfactual <- get_counterfactual(rf_fit[[1]], diabetes, TRUE)
+counterfactual <- get_counterfactual(rf_fit[[1]], diabetes)
 }
 }
