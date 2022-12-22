@@ -11,6 +11,7 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#"
+  # root.dir = "~/bis620.2022/"
 )
 ```
 
@@ -21,7 +22,7 @@ library(randomForest)
 
 # Load the data
 # devtools::install_github("nokkvidan/bis620.2022")
-data("diabetes")
+data(diabetes)
 
 # Splitting the dataset for train and test
 set.seed(1)
@@ -139,11 +140,7 @@ glm_fit <- glm_model("Diabetes_binary", train, test, optimize = "manual")
 summary(glm_fit)
 ```
 
-<<<<<<< HEAD
-The following plots show the three variables with the largest coefficients as well as BMI. The plot makes it clear that those with diabetes have a larger proportion of people with high blood pressure and high cholesterol than those without diabetes. Additionally, there are more men with diabetes than without and less women with diabetes than without. Their differences; however, are not very large and so it makes sense that the coefficient for sex in our logistic regression is not very large.
-=======
 The following plots show three variables which were marked as highly significant, along with the BMI. The plot makes it clear that those with diabetes have a larger proportion of people with high blood pressure and high cholesterol than those without diabetes. Additionally, there are more men with diabetes than without and less women with diabetes than without. Their differences; however, are not very large and so it makes sense that the coefficient for sex in our logistic regression is not very large.
->>>>>>> 3b625d20a0a196393721e166c9e1f6a6c35b3f20
 
 ```{r, fig.width=7, fig.height=7}
 p1 <- vis_2vars(diabetes, "Diabetes_binary", "HighBP")
@@ -166,15 +163,9 @@ print(rf_fit[[1]])
 rf_fit[[6]]
 ```
 
-<<<<<<< HEAD
-The random forest model evaluated BMI (25.12), general health (18.22), heart disease/attacks (17.79), blood pressure (17.17), and cholesterol (16.50) as the top five most important variables for categorizing patients between having and not having diabetes. It is unsurprising that both models would tie diabetes to general health and blood pressure as being important indicators similar to the glm. Meanwhile, the values that are least important are sex (-0.17), mental health (1.99), fruits (3.56), smoking (3.59), and veggies (5.40). This was also similar to the results from the previous model, where mental health had a small coefficient and both fruits and smoking were not significant enough to be included in the model.
-
-The area under the curve here is 0.8193, which is not terrible and means that our model has a good level of separability between classes since it is close to 1.
-=======
 The random forest model evaluated (according to the mean decrease in accuracy metric) BMI (30.82), general health (26.49), Age (24.75), blood pressure (22.16), and cholesterol (22.13) as the top five most important variables for categorizing patients between having and not having diabetes. It is unsurprising that both models would tie diabetes to general health and blood pressure as being important indicators similar to the glm. Meanwhile, the values that are least important are smoking (2.05), mental health (2.86), fruits (3.34), and veggies (3.22). This was also similar to the results from the previous model, where mental health had a small coefficient and both fruits and smoking were not significant enough to be included in the model.
 
 The area under the curve here is 0.8186, which is not terrible and means that our model has a good level of separability between classes since it is close to 1.
->>>>>>> 3b625d20a0a196393721e166c9e1f6a6c35b3f20
 
 ```{r}
 importance(rf_fit[[1]])
@@ -182,11 +173,7 @@ rf_fit[[7]]
 ```
 
 ## XG Boost
-<<<<<<< HEAD
-This final model, XG Boost, is the most powerful of our three models. The training RMSE is roughly 0.12 which is numerically small, however given that our predicted variable range is 0 to 1, it is relatively large for this model. The accuracy of 70.14% which means that both statistics agree the model is okay but not great at predicting diabetes.
-=======
 The training logloss is roughly 0.14 which is numerically small, however given that our predicted variable range is 0 to 1, it is relatively large for this model. The accuracy of 70.77% which means that both statistics agree the model is okay but not great at predicting diabetes.
->>>>>>> 3b625d20a0a196393721e166c9e1f6a6c35b3f20
 
 ```{r, results = "hide", fig.show = "hide", message = FALSE, warning = FALSE}
 xg_fit <- boost_model("Diabetes_binary", train, test)
@@ -198,12 +185,7 @@ print(xg_fit[[2]])
 rf_fit[[7]]
 ```
 
-<<<<<<< HEAD
-Similar to the first two models, blood pressure (gain/contribution to the model: 0.16), BMI (0.15), and general health (0.12) are all important factors in predicting diabetes. Unlike the other models; however, age (0.10) now seems to be higher in importance. This variable is unfortunately non-actionable in terms of lifestyle changes.
-Variables that do not contribute as much to the model are heavy alcohol consumption (0.010), strokes (0.010), and hesitation to visit doctor due to cost (0.012).
-=======
 Similar to the first two models, BMI(gain/contribution to the model):0.179, blood pressure: 0.176, age: 0.122, high cholesterol: 0.037 and general health: 0.028, are all important factors in predicting diabetes. Unlike the other models; however, age: 0.122 now seems to be higher in importance. This variable is unfortunately non-actionable in terms of lifestyle changes.
->>>>>>> 3b625d20a0a196393721e166c9e1f6a6c35b3f20
 ```{r}
 print(xg_fit[[3]])
 ```
@@ -212,11 +194,6 @@ print(xg_fit[[3]])
 In conclusion, the most powerful model of our three variables is the xgboost. Variables like the doctor’s cost, fruits and veggies aren’t indicators that are as important as BMI, general health, blood pressure and cholesterol across models when predicting for diabetes. Also, variables like strokes and heart disease/attacks flip between the most and the least important depending on the model.
 
 # Counter Factuals
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 3b625d20a0a196393721e166c9e1f6a6c35b3f20
 
 We note that each of the three models had their own way of assessing feature relevance. We see that the glm is the easiest to interpret, the random forests should be the most robust against outliers and that xgboost is the most powerful. We attempted to find a set of variables that were marked as significant by each of the models (according to their own metrics), or at the least, variables in which the majority of models marked as significant. We also selected variables that a patient could take an action to change, or reduce the risk of it occurring, for example the patient could lower the BMI through exercise. This was so that the doctor could give the patient a concrete set of improvements to their lives to reduce the likelihood of diabetes.
 
@@ -231,7 +208,7 @@ We output the analysis referenced above in the tables below:
 Note: that only variables that the glm considers significant could be used for our counterfactual model
 
 ```{r}
-# xgboost counterfactual
+# xg boost counterfactual
 eval_xg(train, test, xg_fit)
 ```
 
@@ -243,9 +220,4 @@ eval_rf_and_glm(train, test, rf_fit, type = "prob")
 ```{r}
 # glm counterfactual
 eval_rf_and_glm(train, test, glm_fit, type = "response")
-<<<<<<< HEAD
 ```
->>>>>>> 3b625d2 (tests)
-=======
-```
->>>>>>> 3b625d20a0a196393721e166c9e1f6a6c35b3f20
