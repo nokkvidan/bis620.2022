@@ -21,7 +21,11 @@ library(randomForest)
 
 # Load the data
 # devtools::install_github("nokkvidan/bis620.2022")
+<<<<<<< HEAD
 data("diabetes")
+=======
+data(diabetes)
+>>>>>>> 3b625d20a0a196393721e166c9e1f6a6c35b3f20
 
 # Splitting the dataset for train and test
 set.seed(1)

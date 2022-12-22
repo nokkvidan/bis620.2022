@@ -7,7 +7,7 @@ Maintainer: The package maintainer <nokkvi.ellidason@yale.edu>
 Description: Captures functions, data, and documentation for BIS620 as taught in 2022.
 License: LGPL (>= 2.1)
 Encoding: UTF-8
-RoxygenNote: 7.2.2
+RoxygenNote: 7.2.3
 Imports: 
   ggplot2,
   MASS,
@@ -19,7 +19,9 @@ Imports:
   pROC,
   predtools,
   randomForest,
-  xgboost
+  xgboost,
+  Matrix,
+  stringr
 Roxygen: list(markdown = TRUE)
 Depends: 
   R (>= 4.2)

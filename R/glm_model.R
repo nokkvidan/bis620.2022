@@ -1,5 +1,3 @@
-source("~/bis620.2022/R/string.R")
-
 #' @description Fits a GLM to the input data and returns the model object
 #' @title glm_model
 #' @param y character response variable
@@ -52,7 +50,7 @@ glm_model <- function(y, train, test = NULL, optimize = NA) {
   ## Begin the function
   # Create the glm formula and run it
   form <- as.formula(paste0(y, "~", "."))
-  fit <- glm(form, data = train, family = binomial)
+  fit <- glm(form, data = train, family = "binomial")
   # Save the summary for optimization use
   sum <- summary(fit)
   # If there is no optimization, then the glm fit is the final one
@@ -65,25 +63,27 @@ glm_model <- function(y, train, test = NULL, optimize = NA) {
     sigvars <- rownames(sum$coefficients)[sig]
     # Then re run the model on significant variables only
     form1 <- as.formula(paste(y, "~",
-                              paste(sapply(sigvars, extract_categorical_name), collapse="+")))
-    fit1 <- glm(form1, data = train, family = binomial)
+                              paste(sapply(sigvars, extract_categorical_name),
+                                    collapse = "+")))
+    fit1 <- glm(form1, data = train, family = "binomial")
     # Save this new model's summary and then rerun with 0.05 significance
     sum1 <- summary(fit1)
     sig1 <- which(sum1$coef[, 4] < 0.05)[-1]
     sigvars1 <- rownames(sum1$coefficients)[sig1]
     form2 <- as.formula(paste(y, "~",
-                              paste(sapply(sigvars1, extract_categorical_name), collapse="+")))
+                              paste(sapply(sigvars1, extract_categorical_name),
+                                    collapse = "+")))
     # This is now the final model
-    final_fit <- glm(form2, data = train, family = binomial)
+    final_fit <- glm(form2, data = train, family = "binomial")
   } else if (optimize == "stepAIC") {
     # For stepAIC optimization, then fit the stepAIC algorithm to remove coeffs
     step <- MASS::stepAIC(fit)
     sigvars <- names(step$coefficients[-1])
     # Rerun the glm
-    # form2 <- as.formula(paste(y, "~", paste(sigvars, collapse = "+")))
     form2 <- as.formula(paste(y, "~",
-                              paste(sapply(sigvars1, extract_categorical_name), collapse="+")))
-    final_fit <- glm(form2, data = train, family = binomial)
+                              paste(sapply(sigvars, extract_categorical_name),
+                                    collapse = "+")))
+    final_fit <- glm(form2, data = train, family = "binomial")
   }
   # If testing data is provided:
   if (!is.null(test)) {
@@ -118,7 +118,7 @@ glm_model <- function(y, train, test = NULL, optimize = NA) {
     # as.logical(ev_test$y) changes everything to the same value,
     # so use ifelse() as workaround
     cross_table <- table(predicted = as.logical(ev_test$pred.b),
-                         actual = ifelse(ev_test$y==1,TRUE,FALSE))
+                         actual = ifelse(ev_test$y == 1, TRUE, FALSE))
     confmat <- caret::confusionMatrix(cross_table, positive = "TRUE")
     # ROC
     test_roc <- pROC::roc(ev_test$y ~ ev_test$pred, plot = TRUE,

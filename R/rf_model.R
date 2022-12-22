@@ -34,7 +34,7 @@ rf_model <- function(y, train, test = NULL, optimize = FALSE) {
   if (y %nin% colnames(train)) {
     stop(paste0(y, " is not a variable in your train data"))
   }
-  
+
   # If there is test data, check that their columns match
   if (!is.null(test)) {
     diff1 <- names(train) %nin% names(test)
@@ -104,7 +104,7 @@ rf_model <- function(y, train, test = NULL, optimize = FALSE) {
     row.names(mses) <- c("Training", "Validation")
     # Create cross table and confusion matrix and add to a list
     cross_table <- table(predicted = as.logical(ev_test$pred.b),
-                         actual = ifelse(ev_test$y==1,TRUE,FALSE))
+                         actual = ifelse(ev_test$y == 1, TRUE, FALSE))
     confmat <- caret::confusionMatrix(cross_table, positive = "TRUE")
     # ROC for test data
     test_roc <- pROC::roc(ev_test$y ~ ev_test$pred, plot = TRUE,
