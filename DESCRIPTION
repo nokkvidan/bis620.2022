@@ -21,7 +21,8 @@ Imports:
   randomForest,
   xgboost,
   Matrix,
-  stringr
+  stringr,
+  purrr
 Roxygen: list(markdown = TRUE)
 Depends: 
   R (>= 4.2)

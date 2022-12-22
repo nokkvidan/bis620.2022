@@ -16,7 +16,7 @@ extract_categorical_name <- function(string) {
   }
 
   first_number <- sub(".*?(\\d).*", "\\1", string)
-  if (nchar(first_number) > 1) {
+  if (suppressWarnings(is.na(as.numeric(first_number)))) {
     # no number in string
     return(string)
   }

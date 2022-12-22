@@ -11,17 +11,15 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#"
-  # root.dir = "~/bis620.2022/"
 )
 ```
 
 ```{r setup}
 library(bis620.2022)
 library(dplyr)
-library(randomForest)
 
 # Load the data
-# devtools::install_github("nokkvidan/bis620.2022")
+# devtools::install_github("nokkvidan/bis620.2022@temp")
 data(diabetes)
 
 # Splitting the dataset for train and test
@@ -30,14 +28,9 @@ sample <- sample(c(1, 2), nrow(diabetes), replace = TRUE, prob = c(.8, .2))
 
 # convert all variables to categorical, except for Age and BMI
 train <- diabetes[sample == 1, ] %>%
-  select(-c(4, 13)) %>%
-  mutate_all(as.factor)
-train[, c("Age", "BMI")] <- diabetes[sample == 1, c("Age", "BMI")]
-
+  mutate_at(vars(-c("Age", "BMI")), as.factor)
 test <- diabetes[sample == 2, ] %>%
-  select(-c(4, 13)) %>%
-  mutate_all(as.factor)
-test[, c("Age", "BMI")] <- diabetes[sample == 2, c("Age", "BMI")]
+  mutate_at(vars(-c("Age", "BMI")), as.factor)
 ```
 
 # Motivations
@@ -168,6 +161,7 @@ The random forest model evaluated (according to the mean decrease in accuracy me
 The area under the curve here is 0.8186, which is not terrible and means that our model has a good level of separability between classes since it is close to 1.
 
 ```{r}
+library(randomForest, include.only = "importance")
 importance(rf_fit[[1]])
 rf_fit[[7]]
 ```
@@ -191,33 +185,33 @@ print(xg_fit[[3]])
 ```
 
 
-In conclusion, the most powerful model of our three variables is the xgboost. Variables like the doctor’s cost, fruits and veggies aren’t indicators that are as important as BMI, general health, blood pressure and cholesterol across models when predicting for diabetes. Also, variables like strokes and heart disease/attacks flip between the most and the least important depending on the model.
+Overall, some indicators across models--like the doctor’s cost, fruits and veggies--aren’t as important as BMI, general health, blood pressure and cholesterol when predicting for diabetes. Also, variables like strokes and heart disease/attacks flip between the most and the least important depending on the model. Each of the three models have their own strengths for assessing feature relevance. The glm is the easiest to interpret, the random forests model is the most robust against outliers, and the xgboost model is the most powerful. Future analysis with these models will be dependent on the scope and purpose of the analysis.
 
 # Counter Factuals
 
-We note that each of the three models had their own way of assessing feature relevance. We see that the glm is the easiest to interpret, the random forests should be the most robust against outliers and that xgboost is the most powerful. We attempted to find a set of variables that were marked as significant by each of the models (according to their own metrics), or at the least, variables in which the majority of models marked as significant. We also selected variables that a patient could take an action to change, or reduce the risk of it occurring, for example the patient could lower the BMI through exercise. This was so that the doctor could give the patient a concrete set of improvements to their lives to reduce the likelihood of diabetes.
+To conduct a counter factual analysis, we first begin with finding a set of variables that were marked as significant by each of the models (according to their own metrics), or at the least, variables in which the majority of models marked them as important. We also constrained our selection to actionable indicators so that a patient could take action for change or reduce the risk of it occurring. For example, the patient could lower the BMI through exercise, but could not change their age. By keeping only actionable indicators, the results of this analysis can help a doctor give the patient a concrete set of improvements to their lives to reduce the likelihood of diabetes.
 
-We proceeded by initially fitting our model of the subset of the test data, that were diabetic and which belonged to the class of our specified variable. For example, diabetic patients which had a “high cholesterol” value of 1. The variables we ended up choosing based on these criteria were blood pressure, cholesterol, BMI and heart disease/attack. All of these, except for BMI are categorical variables.
+We proceeded by initially fitting our model on a subset of the test data were patients were diabetic and belonged to the class of our specified variable. For example, diabetic patients who had a “high cholesterol” value of 1. The actionable and important indicators that resulted from these tests were blood pressure, cholesterol, BMI and heart disease/attack. All of these, except for BMI, are categorical variables.
 
-We would examine the initial prediction for the proportion of individuals we predict as having diabetes for our model. We would then change the value of the variable (the counterfactual), to a healthy value (or range in the case of BMI) and notice the increase/decrease in the proportion of individuals being classified as having diabetes.
+Next, we examine the initial prediction for the proportion of individuals we predicted to have diabetes in our model. We changed the value of the variable (the counter factual), to a healthy value (or range in the case of BMI) and noticed the increase/decrease in the proportion of individuals being classified as having diabetes.
 
-In each of the models, performing the counterfactual change reduced the proportion of individuals being classified as having type 2 diabetes for all of our variables. Changing the BMI had the greatest effect in 2 of our models and the 2nd biggest effect in the other. So, it seems the best action to take would be to reduce a patients BMI. This is then followed by reducing the blood pressure and cholesterol levels, which the doctor could also provide remedies for. It seems that the heart disease or attack had consistently the smallest decreases amongst all models so should be given least priority amongst them.
+In each of the models and for all of our variables, performing a counter factual change reduced the proportion of individuals being classified as having type 2 diabetes. Changing the BMI had the greatest effect in two of our models and the 2nd biggest effect in the other. Thus, the best action to take would be to reduce a patients BMI. The next best actions are to reduce the blood pressure and cholesterol levels, which the doctor could also provide remedies for. It seems that the heart disease or attack had consistently the smallest decreases amongst all models so should be given least priority amongst them.
 
-We output the analysis referenced above in the tables below:
+The output of the analysis referenced above is presented in the tables below:
 
 Note: that only variables that the glm considers significant could be used for our counterfactual model
 
 ```{r}
 # xg boost counterfactual
-eval_xg(train, test, xg_fit)
+get_counterfactual(model = xg_fit[[1]], data = test)
 ```
 
 ```{r}
 # random forest counterfactual
-eval_rf_and_glm(train, test, rf_fit, type = "prob")
+get_counterfactual(model = rf_fit[[1]], data = test)
 ```
 
 ```{r}
 # glm counterfactual
-eval_rf_and_glm(train, test, glm_fit, type = "response")
+get_counterfactual(model = glm_fit[[1]], data = test)
 ```

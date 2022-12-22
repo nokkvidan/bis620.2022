@@ -85,3 +85,18 @@ test_that(
     expect_true(inherits(glm_fit, "glm"))
   }
 )
+
+# Tests for extract_categorical_name
+test_that(
+  "Test for extract_categorical_name(): TRUE/FALSE",
+  {
+    expect_true(inherits(extract_categorical_name("stringTRUE"), "character"))
+  }
+)
+
+test_that(
+  "Test for extract_categorical_name(): for names with numbers",
+  {
+    expect_true(inherits(extract_categorical_name("string5"), "character"))
+  }
+)
